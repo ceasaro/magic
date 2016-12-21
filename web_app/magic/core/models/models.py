@@ -43,7 +43,7 @@ class Card(models.Model, CardTypes):
         green_mana = codes.count(Mana.GREEN)
         total_mana += green_mana
 
-        # card has no ability to add mana check if it's a land
+        # card has no ability to add mana check if it's a land card
         card_types = self.types
         if total_mana == 0:
             if land_types.PLAINS in card_types:
