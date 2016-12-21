@@ -1,0 +1,13 @@
+PLAINS = 'Plains'
+ISLAND = 'Island'
+SWAMP = 'Swamp'
+MOUNTAIN = 'Mountain'
+FOREST = 'Forest'
+DESERT = 'Desert'
+GATE = 'Gate'
+LAIR = 'Lair'
+LOCUS = 'Locus'
+MINE = 'Mine'
+POWER_PLANT = 'Power-Plant'
+TOWER = 'Tower'
+URZA_S = "Urza's"

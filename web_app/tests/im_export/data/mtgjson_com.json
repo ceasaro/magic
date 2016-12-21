@@ -1,0 +1,113 @@
+{
+  "Forest": {
+    "layout": "normal",
+    "name": "Forest",
+    "type": "Basic Land — Forest",
+    "supertypes": [
+      "Basic"
+    ],
+    "types": [
+      "Land"
+    ],
+    "subtypes": [
+      "Forest"
+    ],
+    "imageName": "forest",
+    "colorIdentity": [
+      "G"
+    ]
+  },
+  "Plateau": {
+    "layout": "normal",
+    "name": "Plateau",
+    "type": "Land — Mountain Plains",
+    "types": [
+      "Land"
+    ],
+    "subtypes": [
+      "Mountain",
+      "Plains"
+    ],
+    "text": "({T}: Add {R} or {W} to your mana pool.)",
+    "imageName": "plateau",
+    "colorIdentity": [
+      "W",
+      "R"
+    ]
+  },
+  "Air Elemental": {
+    "layout": "normal",
+    "name": "Air Elemental",
+    "manaCost": "{3}{U}{U}",
+    "cmc": 5,
+    "colors": [
+      "Blue"
+    ],
+    "type": "Creature — Elemental",
+    "types": [
+      "Creature"
+    ],
+    "subtypes": [
+      "Elemental"
+    ],
+    "text": "Flying",
+    "power": "4",
+    "toughness": "4",
+    "imageName": "air elemental",
+    "colorIdentity": [
+      "U"
+    ]
+  },
+  "Ancestral Recall": {
+    "layout": "normal",
+    "name": "Ancestral Recall",
+    "manaCost": "{U}",
+    "cmc": 1,
+    "colors": [
+      "Blue"
+    ],
+    "type": "Instant",
+    "types": [
+      "Instant"
+    ],
+    "text": "Target player draws three cards.",
+    "imageName": "ancestral recall",
+    "colorIdentity": [
+      "U"
+    ]
+  },
+  "Atogatog": {
+    "layout": "normal",
+    "name": "Atogatog",
+    "manaCost": "{W}{U}{B}{R}{G}",
+    "cmc": 5,
+    "colors": [
+      "White",
+      "Blue",
+      "Black",
+      "Red",
+      "Green"
+    ],
+    "type": "Legendary Creature — Atog",
+    "supertypes": [
+      "Legendary"
+    ],
+    "types": [
+      "Creature"
+    ],
+    "subtypes": [
+      "Atog"
+    ],
+    "text": "Sacrifice an Atog creature: Atogatog gets +X/+X until end of turn, where X is the sacrificed creature's power.",
+    "power": "5",
+    "toughness": "5",
+    "imageName": "atogatog",
+    "colorIdentity": [
+      "W",
+      "U",
+      "B",
+      "R",
+      "G"
+    ]
+  }
+}
