@@ -40,8 +40,8 @@ def test_card():
     card = Card.objects.create(
         name='my card',
         mana_cost=Mana(red=1, blue=12),
-        power=1,
-        toughness=2,
+        _power='1',
+        _toughness='2',
     )
     assert card.name == 'my card'
     assert card.id, "id should have been generated"

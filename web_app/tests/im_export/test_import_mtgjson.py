@@ -11,7 +11,7 @@ from magic.im_export import mtgjson
 def test_import_mtgjson():
     file_path = os.path.join(os.path.dirname(__file__), './data/mtgjson_com.json')
     mtgjson.import_cards(json.load(open(file_path,  'r')))
-    assert len(Card.objects.all()) == 5
+    assert len(Card.objects.all()) == 6
 
     plateau_card = Card.objects.get(name='Plateau')
     assert plateau_card.name == 'Plateau'
@@ -33,3 +33,11 @@ def test_import_mtgjson():
     assert str(atogatog_card.mana_source) == '0'
     assert atogatog_card.power == 5
     assert atogatog_card.toughness == 5
+
+    assquatch_card = Card.objects.get(name='Assquatch')
+    assert assquatch_card.power == 3.5
+    assert assquatch_card.toughness == 3.5
+
+    vile_aggregate_card = Card.objects.get(name='Vile Aggregate')
+    assert vile_aggregate_card.power == '*'
+    assert vile_aggregate_card.toughness == 5

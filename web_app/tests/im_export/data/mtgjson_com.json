@@ -58,22 +58,49 @@
       "U"
     ]
   },
-  "Ancestral Recall": {
+  "Assquatch": {
     "layout": "normal",
-    "name": "Ancestral Recall",
-    "manaCost": "{U}",
-    "cmc": 1,
+    "name": "Assquatch",
+    "manaCost": "{4}{R}",
+    "cmc": 5,
     "colors": [
-      "Blue"
+      "Red"
     ],
-    "type": "Instant",
+    "type": "Creature — Donkey Lord",
     "types": [
-      "Instant"
+      "Creature"
     ],
-    "text": "Target player draws three cards.",
-    "imageName": "ancestral recall",
+    "subtypes": [
+      "Donkey",
+      "Lord"
+    ],
+    "text": "Each other Donkey gets +1½/+1½.\nWhenever another Donkey comes into play, untap target creature and gain control of it until end of turn. That creature gains haste until end of turn.",
+    "power": "3.5",
+    "toughness": "3.5",
+    "imageName": "assquatch",
     "colorIdentity": [
-      "U"
+      "R"
+    ]
+  },
+  "Vile Aggregate": {
+    "layout": "normal",
+    "name": "Vile Aggregate",
+    "manaCost": "{2}{R}",
+    "cmc": 3,
+    "type": "Creature — Eldrazi Drone",
+    "types": [
+      "Creature"
+    ],
+    "subtypes": [
+      "Eldrazi",
+      "Drone"
+    ],
+    "text": "Devoid (This card has no color.)\nVile Aggregate's power is equal to the number of colorless creatures you control.\nTrample\nIngest (Whenever this creature deals combat damage to a player, that player exiles the top card of his or her library.)",
+    "power": "*",
+    "toughness": "5",
+    "imageName": "vile aggregate",
+    "colorIdentity": [
+      "R"
     ]
   },
   "Atogatog": {

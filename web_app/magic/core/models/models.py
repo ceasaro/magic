@@ -1,4 +1,6 @@
 import re
+
+from decimal import Decimal
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -9,14 +11,26 @@ from magic.core.models.types import CardTypes
 
 class Card(models.Model, CardTypes):
 
-    name = models.CharField(max_length=64, unique=True)
+    name = models.CharField(max_length=256, unique=True)
     _types = models.CharField(max_length=1024)
-    type_line = models.CharField(max_length=64, null=True, blank=True)
+    type_line = models.CharField(max_length=256, null=True, blank=True)
     text = models.CharField(max_length=1024, null=True, blank=True)
     collector_number = models.CharField(max_length=64, null=True, blank=True)
     mana_cost = ManaField(default='', null=True, blank=True)
-    power = models.IntegerField(default=0)
-    toughness = models.IntegerField(default=0)
+    _power = models.CharField(max_length=4)
+    _toughness = models.CharField(max_length=4)
+
+    @property
+    def power(self):
+        if self._power == '*':
+            return self._power
+        return Decimal(self._power)
+
+    @property
+    def toughness(self):
+        if self._toughness == '*':
+            return self._toughness
+        return Decimal(self._toughness)
 
     @property
     def types(self):
