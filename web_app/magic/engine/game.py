@@ -1,11 +1,11 @@
 from random import shuffle
 
-from magic.core.engine.steps import cleanup
-from magic.core.engine.steps import combat
-from magic.core.engine.steps import draw
-from magic.core.engine.steps import main_phase
-from magic.core.engine.steps import untap
-from magic.core.engine.steps import upkeep
+from magic.engine.steps import cleanup
+from magic.engine.steps import combat
+from magic.engine.steps import draw
+from magic.engine.steps import main_phase
+from magic.engine.steps import untap
+from magic.engine.steps import upkeep
 from magic.core.models import Card
 
 
