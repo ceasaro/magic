@@ -9,9 +9,17 @@ from magic.core.models.fields import ManaField, Mana
 from magic.core.models.types import CardTypes
 
 
-class Card(models.Model, CardTypes):
-
+class Set(models.Model):
     name = models.CharField(max_length=256, unique=True)
+    code = models.CharField(max_length=16)
+    type = models.CharField(max_length=64)
+    gathererCode = models.CharField(max_length=16, null=True, blank=True)
+    releaseDate = models.DateField()
+
+
+class Card(models.Model, CardTypes):
+    name = models.CharField(max_length=256)
+    set = models.ForeignKey(Set, blank=False, null=True)
     _types = models.CharField(max_length=1024)
     type_line = models.CharField(max_length=256, null=True, blank=True)
     text = models.CharField(max_length=1024, null=True, blank=True)
@@ -19,6 +27,8 @@ class Card(models.Model, CardTypes):
     mana_cost = ManaField(default='', null=True, blank=True)
     _power = models.CharField(max_length=4)
     _toughness = models.CharField(max_length=4)
+
+    unique_together = (("name", "set"),)
 
     @property
     def power(self):

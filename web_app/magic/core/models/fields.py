@@ -2,6 +2,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from magic.core.exception import ManaValidationError
+
 
 class Mana(object):
     COLOURLESS = ''
@@ -18,14 +20,17 @@ class Mana(object):
         self.black = black
         self.red = red
         self.green = green
+        self.X = ''
         str_repr = args[0] if args else None
         if str_repr:
             self.from_str(str_repr)
 
     def from_str(self, str_repr):
+        # todo: allow mana of the form '{B/R}' (blue or red)
+        # todo: allow mana of the form 'C'
         colourless = ''
         for i, char in enumerate(str_repr):
-            if char in '0123456789' and len(colourless) == i:
+            if char in '0123456789' and len(colourless) == (i - len(self.X)):
                 colourless += char
             elif char == self.WHITE:
                 self.white += 1
@@ -37,22 +42,26 @@ class Mana(object):
                 self.red += 1
             elif char == self.GREEN:
                 self.green += 1
+            elif char == 'X':
+                self.X = 'X'
             else:
-                raise ValidationError(_("Illegal string representation for mana: {}".format(str_repr)))
+                raise ManaValidationError(_("Illegal string representation for mana: {}".format(str_repr)))
         if colourless:
             self.colourless = int(colourless)
 
     def __str__(self, *args, **kwargs):
-        return "{}{}{}{}{}{}".format(self.colourless if self.colourless else
-                                        '0' if self.white + self.blue + self.black + self.red + self.green == 0 else '',
-                                     self.WHITE * self.white,
-                                     self.BLUE * self.blue,
-                                     self.BLACK * self.black,
-                                     self.RED * self.red,
-                                     self.GREEN * self.green)
+        return "{}{}{}{}{}{}{}".format(
+            self.X,
+            self.colourless if self.colourless else '0' if self.white + self.blue + self.black + self.red + self.green == 0 and not self.X else '',
+            self.WHITE * self.white,
+            self.BLUE * self.blue,
+            self.BLACK * self.black,
+            self.RED * self.red,
+            self.GREEN * self.green)
 
     def __repr__(self):
         return self.__str__()
+
 
 class ManaField(models.CharField):
     def __init__(self, *args, **kwargs):

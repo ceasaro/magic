@@ -1,0 +1,126 @@
+{
+  "LEA": {
+    "booster": [
+      "rare",
+      "uncommon",
+      "uncommon",
+      "uncommon",
+      "common",
+      "common",
+      "common",
+      "common",
+      "common",
+      "common",
+      "common",
+      "common",
+      "common",
+      "common",
+      "common"
+    ],
+    "magicCardsInfoCode": "al",
+    "mkm_name": "Alpha",
+    "cards": [
+      {
+        "artist": "Richard Thomas",
+        "cmc": 5,
+        "colorIdentity": [
+          "U"
+        ],
+        "colors": [
+          "Blue"
+        ],
+        "flavor": "These spirits of the air are winsome and wild, and cannot be truly contained. Only marginally intelligent, they often substitute whimsy for strategy, delighting in mischief and mayhem.",
+        "id": "27efae96470cf20bd2db52c2b8d30d6d4ac96426",
+        "imageName": "air elemental",
+        "layout": "normal",
+        "manaCost": "{3}{U}{U}",
+        "mciNumber": "47",
+        "multiverseid": 389,
+        "name": "Air Elemental",
+        "power": "4",
+        "rarity": "Uncommon",
+        "subtypes": [
+          "Elemental"
+        ],
+        "text": "Flying",
+        "toughness": "4",
+        "type": "Creature — Elemental",
+        "types": [
+          "Creature"
+        ]
+      },
+      {
+        "artist": "Mark Poole",
+        "cmc": 1,
+        "colorIdentity": [
+          "U"
+        ],
+        "colors": [
+          "Blue"
+        ],
+        "id": "aa74b7dc3b30b2e7559598f983543755e226811d",
+        "imageName": "ancestral recall",
+        "layout": "normal",
+        "manaCost": "{U}",
+        "mciNumber": "48",
+        "multiverseid": 95,
+        "name": "Ancestral Recall",
+        "rarity": "Rare",
+        "reserved": true,
+        "text": "Target player draws three cards.",
+        "type": "Instant",
+        "types": [
+          "Instant"
+        ]
+      },
+      {
+        "artist": "Ron Spears",
+        "cmc": 5,
+        "colorIdentity": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G"
+        ],
+        "colors": [
+          "White",
+          "Blue",
+          "Black",
+          "Red",
+          "Green"
+        ],
+        "flavor": "It relishes old-fashioned family meals.",
+        "id": "35d6a7b7b5b17838bcacecd66fa49c11a835dc59",
+        "imageName": "atogatog",
+        "layout": "normal",
+        "manaCost": "{W}{U}{B}{R}{G}",
+        "mciNumber": "286",
+        "multiverseid": 31834,
+        "name": "Atogatog",
+        "number": "286",
+        "power": "5",
+        "rarity": "Rare",
+        "subtypes": [
+          "Atog"
+        ],
+        "supertypes": [
+          "Legendary"
+        ],
+        "text": "Sacrifice an Atog creature: Atogatog gets +X/+X until end of turn, where X is the sacrificed creature's power.",
+        "toughness": "5",
+        "type": "Legendary Creature — Atog",
+        "types": [
+          "Creature"
+        ]
+      }
+    ],
+    "type": "core",
+    "gathererCode": "1E",
+    "border": "black",
+    "code": "LEA",
+    "mkm_id": 1,
+    "releaseDate": "1993-08-05",
+    "name": "Limited Edition Alpha"
+  }
+}
