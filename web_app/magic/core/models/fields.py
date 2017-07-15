@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -26,7 +25,7 @@ class Mana(object):
             self.from_str(str_repr)
 
     def from_str(self, str_repr):
-        # todo: allow mana of the form '{B/R}' (blue or red)
+        # todo: allow mana of the form '{B/R}' (black or red)
         # todo: allow mana of the form 'C'
         colourless = ''
         for i, char in enumerate(str_repr):
@@ -61,6 +60,33 @@ class Mana(object):
 
     def __repr__(self):
         return self.__str__()
+
+
+class ManaPool(Mana):
+    def pay(self, mana):
+        if self.colourless >= mana.colourless \
+                and self.white >= mana.white \
+                and self.blue >= mana.blue \
+                and self.black >= mana.black \
+                and self.red >= mana.red\
+                and self.green >= mana.green:
+            self.colourless -= mana.colourless
+            self.white -= mana.white
+            self.blue -= mana.blue
+            self.black -= mana.black
+            self.red -= mana.red
+            self.green -= mana.green
+            return True
+        else:
+            return False
+
+    def add(self, mana):
+        self.colourless += mana.colourless
+        self.white += mana.white
+        self.blue += mana.blue
+        self.black += mana.black
+        self.red += mana.red
+        self.green += mana.green
 
 
 class ManaField(models.CharField):

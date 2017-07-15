@@ -1,5 +1,6 @@
 from random import shuffle
 
+from magic.core.models.fields import ManaPool
 from magic.engine.steps import cleanup
 from magic.engine.steps import combat
 from magic.engine.steps import draw
@@ -23,11 +24,21 @@ class Cards():
         assert isinstance(card, Card)
         self.cards.append(card)
 
+    def remove(self, card):
+        assert isinstance(card, Card)
+        self.cards.remove(card)
+
+    def count(self):
+        return len(self.cards)
+
+    def __contains__(self, card):
+        return card in self.cards
+
 
 class Deck(Cards):
 
     def shuffle(self):
-        self.cards = shuffle(self.cards)
+        shuffle(self.cards)
 
     def add(self, card):
         super().add(card)
@@ -40,8 +51,10 @@ class Deck(Cards):
 
 class Player():
 
-    def __init__(self, library):
+    def __init__(self, name, library):
         super().__init__()
+        self.name = name
+        self.live = 20
         self.library = library if library else Deck()
         self.hand = Cards()
         for i in range(7):
@@ -49,6 +62,7 @@ class Player():
         self.played_cards = Cards()
         self.graveyard = Deck()
         self.exiled = Deck()
+        self.mana_pool = ManaPool()
 
     def turn(self):
         # Beginning Phase
@@ -71,6 +85,12 @@ class Player():
 
         # End Phase
         cleanup.step()
+
+    def play(self, card):
+        if card in self.hand and self.mana_pool.pay(card.mana_cost):
+            self.hand.remove(card)
+            self.played_cards.add(card)
+            self.mana_pool.add(card.mana_source)
 
 
 

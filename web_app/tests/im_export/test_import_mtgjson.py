@@ -1,17 +1,11 @@
-import json
-import os
-
 import pytest
 
 from magic.core.models import Card, land_types
 from magic.core.models import creature_types
-from magic.im_export import mtgjson
 
 @pytest.mark.django_db
-def test_import_mtgjson():
-    file_path = os.path.join(os.path.dirname(__file__), './data/mtgjson_sets_com.json')
-    mtgjson.import_sets(json.load(open(file_path,  'r')))
-    assert len(Card.objects.all()) == 8
+def test_import_mtgjson(card_library):
+    assert card_library.count() == 48
 
     plateau_card = Card.objects.get(name='Plateau')
     assert plateau_card.name == 'Plateau'

@@ -19,6 +19,7 @@ def import_cards(json_data, verbosity=0):
 def create_or_update_card(card, set):
     new_card, created = Card.objects.update_or_create(name=card.get('name'),
                                                       set=set,
+                                                      external_id=card.get('id'),
                                                       defaults={
                                                           '_types': ','.join(card.get('subtypes', [])),
                                                           'type_line': card.get('type', None),
