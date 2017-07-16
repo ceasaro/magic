@@ -42,11 +42,12 @@ def test_mana(mana_str, expected_mana_str, expected):
 @pytest.mark.django_db
 def test_card():
     card = Card.objects.create(
+        external_id="1435987",
         name='my card',
         mana_cost=Mana(red=1, blue=12),
         _power='1',
         _toughness='2',
     )
     assert card.name == 'my card'
-    assert card.id, "id should have been generated"
+    assert card.external_id, "id should have been generated"
     assert str(card.mana_cost) == 'UUUUUUUUUUUUR'

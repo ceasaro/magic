@@ -5,7 +5,7 @@ from magic.core.models import creature_types
 
 @pytest.mark.django_db
 def test_import_mtgjson(card_library):
-    assert card_library.count() == 48
+    assert card_library.count() == 49
 
     plateau_card = Card.objects.get(name='Plateau')
     assert plateau_card.name == 'Plateau'

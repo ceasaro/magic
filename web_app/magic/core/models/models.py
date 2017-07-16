@@ -20,6 +20,9 @@ class Set(models.Model):
     def __repr__(self):
         return self.name
 
+    def __str__(self):
+        return self.__repr__()
+
 
 class Card(models.Model, CardTypes):
     name = models.CharField(max_length=256)
@@ -96,7 +99,10 @@ class Card(models.Model, CardTypes):
                     green=green_mana)
 
     def __repr__(self):
-        return "{} ({})".format(self.name, self.set)
+        return "{} ({}): Card".format(self.name, self.set)
+
+    def __str__(self):
+        return self.__repr__()
 
 
 class Player(models.Model):
