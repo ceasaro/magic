@@ -128,11 +128,12 @@ class Player():
         cleanup.step()
 
     def play(self, card):
-        if card in self.hand and self.mana_pool.pay(card.mana_cost):
-            self.hand.remove(card)
-            self.played_cards.add(card)
-        else:
-            raise MagicGameException("can't play the card: {}".format(card))
+        if card:
+            if card in self.hand and self.mana_pool.pay(card.mana_cost):
+                self.hand.remove(card)
+                self.played_cards.add(card)
+            else:
+                raise MagicGameException("can't play the card: {}".format(card))
 
     def tap(self, card):
         if not card.tapped:

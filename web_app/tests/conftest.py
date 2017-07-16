@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from magic.core.models import Card, Set
+from magic.core.models import Card
 from magic.engine.game import Player, Game, Deck, Cards
 from magic.im_export import mtgjson
 
@@ -27,33 +27,41 @@ def card_library_2():
 
 
 @pytest.fixture()
-def lea_forest_card(card_library):
+def lea_forest_land(card_library):
     return Card.objects.get(set__code='LEA', name='Forest')
 
 
 @pytest.fixture()
-def lea_badlands_card(card_library):
+def lea_badlands_land(card_library):
     return Card.objects.get(set__code='LEA', name='Badlands')
 
 
 @pytest.fixture()
-def lea_bad_moon_card(card_library):
+def lea_birds_of_paradise_creature(card_library):
+    return Card.objects.get(set__code='LEA', name='Birds of Paradise')
+
+
+@pytest.fixture()
+def lea_bad_moon_enchantment(card_library):
     return Card.objects.get(set__code='LEA', name='Bad Moon')
 
 
 @pytest.fixture()
-def lea_berserk_card(card_library):
+def lea_berserk_instance(card_library):
     return Card.objects.get(set__code='LEA', name='Berserk')
 
 
 @pytest.fixture()
-def player_fixed(card_library, lea_forest_card, lea_badlands_card, lea_bad_moon_card, lea_berserk_card):
+def player(card_library, lea_forest_land, lea_badlands_land, lea_birds_of_paradise_creature,
+           lea_bad_moon_enchantment, lea_berserk_instance,
+           ):
     player = Player("fixed", card_library)
     player.hand = Cards()
-    player.hand.add(lea_forest_card)
-    player.hand.add(lea_badlands_card)
-    player.hand.add(lea_bad_moon_card)
-    player.hand.add(lea_berserk_card)
+    player.hand.add(lea_forest_land)
+    player.hand.add(lea_badlands_land)
+    player.hand.add(lea_birds_of_paradise_creature)
+    player.hand.add(lea_bad_moon_enchantment)
+    player.hand.add(lea_berserk_instance)
     return player
 
 
@@ -68,5 +76,5 @@ def player_wes_lee(card_library_2):
 
 
 @pytest.fixture()
-def game(player_wes_lee, player_cees    ):
+def game(player_wes_lee, player_cees):
     return Game([player_wes_lee, player_cees])
