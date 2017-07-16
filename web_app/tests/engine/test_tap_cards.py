@@ -26,3 +26,14 @@ def test_tap_land_card(player, lea_forest_land):
 
     player.tap(forest_2)
     assert str(player.mana_pool) == 'GG', 'tapping again should not add extra mana'
+
+
+@pytest.mark.django_db
+def test_tap_creature_card(player):
+    birds_of_paradise = player.hand.get_by_name("Birds of Paradise")
+    forest = player.hand.get_by_name("Forest")
+    player.play(forest)
+    player.tap(forest)
+    player.play(birds_of_paradise)
+    player.tap(birds_of_paradise)
+    assert birds_of_paradise in player.attacking_creatures

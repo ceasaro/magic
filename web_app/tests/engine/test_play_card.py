@@ -23,7 +23,7 @@ def test_play_land_card(player):
 
 
 @pytest.mark.django_db
-def test_play_creature_card_no_mana(player):
+def test_play_creature_card(player):
     birds_of_paradise = player.hand.get_by_name("Birds of Paradise")
     with pytest.raises(MagicGameException):
         player.play(birds_of_paradise)

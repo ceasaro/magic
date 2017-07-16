@@ -98,6 +98,31 @@ class Card(models.Model, CardTypes):
                     red=red_mana,
                     green=green_mana)
 
+
+    def is_supertype(self, card_type):
+        return any(x in self.types for x in self.SUPERTYPES)
+
+    def is_permanent(self, card_type):
+        return any(x in self.types for x in self.PERMANENTS)
+
+    def is_non_permanent(self, card_type):
+        return any(x in self.types for x in self.NON_PERMANENTS)
+
+    def is_artifact(self, card_type):
+        return any(x in self.types for x in self.ARTIFACT)
+
+    def is_creature(self):
+        return any(x in self.types for x in self.CREATURE)
+
+    def is_enchantment(self, card_type):
+        return any(x in self.types for x in self.ENCHANTMENT)
+
+    def is_land(self, card_type):
+        return any(x in self.types for x in self.LAND)
+
+    def is_planes_walker(self, card_type):
+        return any(x in self.types for x in self.PLANESWALKER)
+
     def __repr__(self):
         return "{} ({}): Card".format(self.name, self.set)
 

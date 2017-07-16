@@ -105,6 +105,8 @@ class Player():
         self.exiled = Deck()
         self.mana_pool = ManaPool()
 
+        self.attacking_creatures = Cards()
+
     def turn(self):
         # Beginning Phase
         untap.step(self)
@@ -139,6 +141,8 @@ class Player():
         if not card.tapped:
             card.tapped = True
             self.mana_pool.add(card.mana_source)
+            if card.is_creature():
+                self.attacking_creatures.add(card)
 
     def untap(self, card):
         if card.tapped:

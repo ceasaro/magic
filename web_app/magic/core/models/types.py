@@ -39,27 +39,3 @@ class CardTypes(object):
     ALL_TYPES = SUPERTYPES + PERMANENTS + NON_PERMANENTS
 
     type_choises = [(t, t) for t in ALL_TYPES]
-
-    def is_supertype(self, card_type):
-        return card_type in self.SUPERTYPES
-
-    def is_permanent(self, card_type):
-        return card_type in self.PERMANENTS
-
-    def is_non_permanent(self, card_type):
-        return card_type in self.NON_PERMANENTS
-
-    def is_artifact(self, card_type):
-        return card_type in self.ARTIFACT
-
-    def is_creature(self, card_type):
-        return card_type in self.CREATURE
-
-    def is_enchantment(self, card_type):
-        return card_type in self.ENCHANTMENT
-
-    def is_land(self, card_type):
-        return card_type in self.LAND
-
-    def is_planes_walker(self, card_type):
-        return card_type in self.PLANESWALKER
