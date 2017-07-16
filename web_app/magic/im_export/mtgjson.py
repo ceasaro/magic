@@ -26,7 +26,8 @@ def create_or_update_card(card, set):
                                                       set=set,
                                                       external_id=card.get('id'),
                                                       defaults={
-                                                          '_types': ','.join(card.get('subtypes', [])),
+                                                          '_types': ','.join(card.get('types', [])),
+                                                          '_subtypes': ','.join(card.get('subtypes', [])),
                                                           'type_line': card.get('type', None),
                                                           'text': card.get('text', None),
                                                           'mana_cost': card.get('manaCost', '').translate(

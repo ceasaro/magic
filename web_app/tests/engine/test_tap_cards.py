@@ -36,4 +36,4 @@ def test_tap_creature_card(player):
     player.tap(forest)
     player.play(birds_of_paradise)
     player.tap(birds_of_paradise)
-    assert birds_of_paradise in player.attacking_creatures
+    assert birds_of_paradise in player.attacking_creatures, "expected 'Birds of Paradise' in attacking cards"

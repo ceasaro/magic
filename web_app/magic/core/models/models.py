@@ -29,6 +29,7 @@ class Card(models.Model, CardTypes):
     external_id = models.CharField(primary_key=True, max_length=50, editable=False)
     set = models.ForeignKey(Set, blank=False, null=True, related_name='cards')
     _types = models.CharField(max_length=1024)
+    _subtypes = models.CharField(max_length=1024)
     type_line = models.CharField(max_length=256, null=True, blank=True)
     text = models.CharField(max_length=1024, null=True, blank=True)
     collector_number = models.CharField(max_length=64, null=True, blank=True)
@@ -55,6 +56,10 @@ class Card(models.Model, CardTypes):
         return self._types.split(',')
 
     @property
+    def subtypes(self):
+        return self._subtypes.split(',')
+
+    @property
     def text_codes(self):
         if self.text:
             return re.findall('\{(.?)\}', self.text)
@@ -78,7 +83,7 @@ class Card(models.Model, CardTypes):
             total_mana += green_mana
 
         # card has no ability to add mana check if it's a land card
-        card_types = self.types
+        card_types = self.subtypes
         if total_mana == 0:
             if land_types.PLAINS in card_types:
                 white_mana += 1
@@ -99,28 +104,28 @@ class Card(models.Model, CardTypes):
                     green=green_mana)
 
 
-    def is_supertype(self, card_type):
+    def is_supertype(self):
         return any(x in self.types for x in self.SUPERTYPES)
 
-    def is_permanent(self, card_type):
+    def is_permanent(self):
         return any(x in self.types for x in self.PERMANENTS)
 
-    def is_non_permanent(self, card_type):
+    def is_non_permanent(self):
         return any(x in self.types for x in self.NON_PERMANENTS)
 
-    def is_artifact(self, card_type):
+    def is_artifact(self):
         return any(x in self.types for x in self.ARTIFACT)
 
     def is_creature(self):
-        return any(x in self.types for x in self.CREATURE)
+        return self.CREATURE in self.types
 
-    def is_enchantment(self, card_type):
+    def is_enchantment(self):
         return any(x in self.types for x in self.ENCHANTMENT)
 
-    def is_land(self, card_type):
-        return any(x in self.types for x in self.LAND)
+    def is_land(self):
+        return any(x in self.types for x in self.LANDS)
 
-    def is_planes_walker(self, card_type):
+    def is_planes_walker(self):
         return any(x in self.types for x in self.PLANESWALKER)
 
     def __repr__(self):

@@ -16,18 +16,20 @@ class CardTypes(object):
     FORTIFICATION = 'Fortification'
     ARTIFACT = [CLUE, CONTRAPTION, EQUIPMENT, FORTIFICATION]
 
-    CREATURE = [creature for creature in dir(creature_types) if not creature.startswith('__')]
+    CREATURE = 'Creature'
+    CREATURES = [creature for creature in dir(creature_types) if not creature.startswith('__')]
 
     AURA = 'Aura'
     CURSE = 'Curse'
     SHRINE = 'Shrine'
     ENCHANTMENT = [AURA, CURSE, SHRINE]
 
-    LAND = [land_type for land_type in dir(land_types) if not land_type.startswith('__')]
+    LAND = 'Land'
+    LANDS = [land_type for land_type in dir(land_types) if not land_type.startswith('__')]
 
     PLANESWALKER = 'Planeswalker'  # subtypes
     # import pdb; pdb.set_trace()
-    PERMANENTS = ARTIFACT + CREATURE + ENCHANTMENT + LAND + [PLANESWALKER]
+    PERMANENTS = ARTIFACT + [CREATURE] + ENCHANTMENT + LANDS + [PLANESWALKER]
 
     # Nonpermanents
     INSTANT = 'Instant'

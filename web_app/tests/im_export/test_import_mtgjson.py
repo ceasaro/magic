@@ -1,6 +1,6 @@
 import pytest
 
-from magic.core.models import Card, land_types
+from magic.core.models import Card, land_types, CardTypes
 from magic.core.models import creature_types
 
 @pytest.mark.django_db
@@ -9,8 +9,9 @@ def test_import_mtgjson(card_library):
 
     plateau_card = Card.objects.get(name='Plateau')
     assert plateau_card.name == 'Plateau'
-    assert land_types.MOUNTAIN in plateau_card.types
-    assert land_types.PLAINS in plateau_card.types
+    assert CardTypes.LAND  in plateau_card.types
+    assert land_types.MOUNTAIN in plateau_card.subtypes
+    assert land_types.PLAINS in plateau_card.subtypes
     assert plateau_card.type_line == "Land — Mountain Plains"
     assert plateau_card.text == "({T}: Add {R} or {W} to your mana pool.)"
     assert str(plateau_card.mana_cost) == '0'
@@ -20,7 +21,8 @@ def test_import_mtgjson(card_library):
 
     atogatog_card = Card.objects.get(name='Atogatog')
     assert atogatog_card.name == 'Atogatog'
-    assert creature_types.ATOG in atogatog_card.types
+    assert CardTypes.CREATURE in atogatog_card.types
+    assert creature_types.ATOG in atogatog_card.subtypes
     assert atogatog_card.type_line == "Legendary Creature — Atog"
     assert atogatog_card.text == "Sacrifice an Atog creature: Atogatog gets +X/+X until end of turn, where X is the sacrificed creature's power."
     assert str(atogatog_card.mana_cost) == 'WUBRG'
