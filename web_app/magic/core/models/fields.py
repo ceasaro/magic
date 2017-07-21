@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from magic.core.exception import ManaValidationError
+from magic.core.exception import ManaValidationError, NoManaException
 
 
 class Mana(object):
@@ -48,6 +48,9 @@ class Mana(object):
         if colourless:
             self.colourless = int(colourless)
 
+    def val(self):
+        return self.__str__()
+
     def __str__(self, *args, **kwargs):
         return "{}{}{}{}{}{}{}".format(
             self.X,
@@ -63,22 +66,25 @@ class Mana(object):
 
 
 class ManaPool(Mana):
+
+    def can_pay(self, mana):
+        return self.colourless >= mana.colourless \
+        and self.white >= mana.white \
+        and self.blue >= mana.blue \
+        and self.black >= mana.black \
+        and self.red >= mana.red \
+        and self.green >= mana.green
+
     def pay(self, mana):
-        if self.colourless >= mana.colourless \
-                and self.white >= mana.white \
-                and self.blue >= mana.blue \
-                and self.black >= mana.black \
-                and self.red >= mana.red\
-                and self.green >= mana.green:
+        if self.can_pay(mana):
             self.colourless -= mana.colourless
             self.white -= mana.white
             self.blue -= mana.blue
             self.black -= mana.black
             self.red -= mana.red
             self.green -= mana.green
-            return True
         else:
-            return False
+            raise NoManaException("can't pay mana, needed '{}', available '{}'".format(mana, self))
 
     def add(self, mana):
         self.colourless += mana.colourless
@@ -87,6 +93,14 @@ class ManaPool(Mana):
         self.black += mana.black
         self.red += mana.red
         self.green += mana.green
+
+    def substract(self, mana):
+        self.colourless -= mana.colourless
+        self.white -= mana.white
+        self.blue -= mana.blue
+        self.black -= mana.black
+        self.red -= mana.red
+        self.green -= mana.green
 
 
 class ManaField(models.CharField):

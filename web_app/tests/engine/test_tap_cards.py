@@ -1,6 +1,6 @@
 import pytest
 
-from magic.core.exception import MagicGameException
+from magic.core.exception import MagicGameException, NoManaException
 
 
 @pytest.mark.django_db
@@ -36,4 +36,21 @@ def test_tap_creature_card(player):
     player.tap(forest)
     player.play(birds_of_paradise)
     player.tap(birds_of_paradise)
-    assert birds_of_paradise in player.attacking_creatures, "expected 'Birds of Paradise' in attacking cards"
+    assert birds_of_paradise in player.attacking_cards, "expected 'Birds of Paradise' in attacking cards"
+
+    # test untap
+    player.untap(birds_of_paradise)
+    assert birds_of_paradise.tapped == False
+
+@pytest.mark.django_db
+def test_tap_land_card(player):
+    birds_of_paradise = player.hand.get_by_name("Birds of Paradise")
+    forest = player.hand.get_by_name("Forest")
+    player.play(forest)
+    player.tap(forest)
+    player.untap(forest)
+    assert forest.tapped == False
+    player.tap(forest)
+    player.play(birds_of_paradise)
+    player.untap(forest)
+    assert forest.tapped == False

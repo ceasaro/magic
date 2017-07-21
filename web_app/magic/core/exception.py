@@ -7,5 +7,8 @@ class MagicException(Exception):
 class MagicGameException(Exception):
     pass
 
+class NoManaException(Exception):
+    pass
+
 class ManaValidationError(MagicException, ValidationError):
     pass

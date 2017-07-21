@@ -6,4 +6,5 @@ def step(player):
     3) Current player untaps all permanents he controls.
     :return:
     """
-    pass
+    for card in player.cards:
+        card.tapped = False

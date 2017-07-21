@@ -1,6 +1,6 @@
 from random import shuffle
 
-from magic.core.exception import MagicGameException
+from magic.core.exception import MagicGameException, NoManaException
 from magic.core.models import Card
 from magic.core.models.fields import ManaPool
 from magic.engine.steps import cleanup
@@ -105,7 +105,7 @@ class Player():
         self.exiled = Deck()
         self.mana_pool = ManaPool()
 
-        self.attacking_creatures = Cards()
+        self.attacking_cards = Cards()
 
     def turn(self):
         # Beginning Phase
@@ -131,7 +131,8 @@ class Player():
 
     def play(self, card):
         if card:
-            if card in self.hand and self.mana_pool.pay(card.mana_cost):
+            if card in self.hand:
+                self.mana_pool.pay(card.mana_cost)
                 self.hand.remove(card)
                 self.played_cards.add(card)
             else:
@@ -142,7 +143,7 @@ class Player():
             card.tapped = True
             self.mana_pool.add(card.mana_source)
             if card.is_creature():
-                self.attacking_creatures.add(card)
+                self.attacking_cards.add(card)
 
     def untap(self, card):
         if card.tapped:
