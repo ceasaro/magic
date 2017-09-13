@@ -10,7 +10,7 @@ from magic.im_export import mtgjson
 class Command(BaseCommand):
     all_cards_json = os.path.join(settings.PROJECT_DIR, 'data/mtgjson.com/AllCards.json')
     all_sets_json = os.path.join(settings.PROJECT_DIR, 'data/mtgjson.com/AllSets.json')
-    help = 'import magic the gathering data from the [PROJECT]/data/*.json (mtgjson.com)'
+    help = 'import magic the gathering data from the [PROJECT]/data/*.json (mtgjson.com) e.g. ./manage import_mtgjson --sets'
 
     def add_arguments(self, parser):
 
