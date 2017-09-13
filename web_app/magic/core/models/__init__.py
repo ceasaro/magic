@@ -1,1 +1,1 @@
-from .models import *
+from .magic_models import *

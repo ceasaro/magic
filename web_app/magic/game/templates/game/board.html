@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block container %}
+    <div class="row">
+        <div class="col">
+            {% for player in game.players %}
+                <h2>{{ player.name }}</h2>
+                <ul>
+                {% for card in player.library.cards %}
+                    <li>{{ card.name }}  <img scr="{{MEDIA_URL}}{{card.image}}">{{MEDIA_URL}}{{card.image}}({{ card.set.code }})</li>
+                {% endfor %}
+                </ul>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">Col1</div>
+        <div class="col">Col2</div>
+        <div class="col">Col3</div>
+    </div>
+
+{% endblock container %}

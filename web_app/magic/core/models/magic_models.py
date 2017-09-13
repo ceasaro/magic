@@ -1,13 +1,23 @@
 import re
-import uuid
 
 from decimal import Decimal
+
+import os
+from urllib.request import urlretrieve
+
+import errno
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.files import File
 from django.db import models
+from django.template.defaultfilters import slugify
 
 from magic.core.models import land_types
 from magic.core.models.fields import ManaField, Mana
 from magic.core.models.types import CardTypes
+from magic.im_export.magiccards import import_card_image
+
+CARD_IMAGES_ROOT = os.path.join(settings.MEDIA_ROOT, 'CARD_IMAGES')
 
 
 class Set(models.Model):
@@ -24,8 +34,15 @@ class Set(models.Model):
         return self.__repr__()
 
 
+def card_image_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    path_name, img_ext = os.path.splitext(filename)
+    return 'CARD_IMAGES/{0}/{1}{2}'.format(slugify(instance.set.name), slugify(instance.name), img_ext)
+
+
 class Card(models.Model, CardTypes):
     name = models.CharField(max_length=256)
+    _image = models.FileField(upload_to=card_image_path, null=True, blank=True)
     external_id = models.CharField(primary_key=True, max_length=50, editable=False)
     set = models.ForeignKey(Set, blank=False, null=True, related_name='cards')
     _types = models.CharField(max_length=1024)
@@ -38,6 +55,24 @@ class Card(models.Model, CardTypes):
     _toughness = models.CharField(max_length=4)
 
     unique_together = (("name", "set"),)
+
+    @property
+    def image(self):
+        if not self._image:
+            img_url = import_card_image(self.name)
+            img_model_name = card_image_path(self, img_url)
+            img_file_name = os.path.join(settings.MEDIA_ROOT, img_model_name)
+            if not os.path.exists(os.path.dirname(img_file_name)):
+                try:
+                    os.makedirs(os.path.dirname(img_file_name))
+                except OSError as exc:  # Guard against race condition
+                    if exc.errno != errno.EEXIST:
+                        raise
+            urlretrieve(img_url, img_file_name)
+            self._image = img_model_name
+            self.save()
+            pass
+        return self._image
 
     @property
     def power(self):
@@ -143,7 +178,8 @@ class Player(models.Model):
 
 
 class Deck(models.Model):
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
+    set = models.ForeignKey(Set, null=True, blank=True)
     cards = models.ManyToManyField(Card, related_name='deck')
 
 

@@ -4,6 +4,7 @@
 .settings/
 
 
+MEDIA/
 web_app/magic/settings/local_settings.py
 web_app/.cache/
 local_fabfile.py
@@ -23,6 +24,10 @@ doc/gbk/wzs/*.html
 .pydevproject
 /.metadata/
 trello_settings.py
+
+# testing files
+testing.py
+
 
 # pytest
 .cache
