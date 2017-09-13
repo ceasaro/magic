@@ -42,7 +42,7 @@ class Mana(object):
             elif char == self.GREEN:
                 self.green += 1
             elif char == 'X':
-                self.X = 'X'
+                self.X += 'X'
             else:
                 raise ManaValidationError(_("Illegal string representation for mana: {}".format(str_repr)))
         if colourless:
