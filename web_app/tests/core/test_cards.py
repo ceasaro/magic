@@ -17,6 +17,7 @@ from magic.core.models import Card
         ("X", "X", (0,'X',0,0,0,0,0)),
         ("X1U", "X1U", (1,'X',0,1,0,0,0)),
         ("XWWUUR", "XWWUUR", (0,'X',2,2,0,1,0)),
+        ("XX2WW", "XX2WW", (2,'XX',2,0,0,0,0)),
         (None, "0", (0,'',0,0,0,0,0)),
         ("1W3G", "exception", "exception"),
     ])
