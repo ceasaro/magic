@@ -6,7 +6,7 @@
                 <h2>{{ player.name }}</h2>
                 <ul>
                 {% for card in player.library.cards %}
-                    <li>{{ card.name }}  <img scr="{{MEDIA_URL}}{{card.image}}">{{MEDIA_URL}}{{card.image}}({{ card.set.code }})</li>
+                    <li>{{ card.name }}  <img src="{{MEDIA_URL}}{{card.image}}">({{ card.set.code }})</li>
                 {% endfor %}
                 </ul>
             {% endfor %}
