@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="{% static "bootstrap-4.0.0-beta-dist/css/bootstrap-reboot.min.css" %}">
     <link rel="stylesheet" href="{% static "bootstrap-4.0.0-beta-dist/css/bootstrap.min.css" %}">
     <link rel="stylesheet" href="{% static "bootstrap-4.0.0-beta-dist/css/bootstrap-grid.min.css" %}">
-    <script src="{% static "bootstrap-4.0.0-beta-dist/js/bootstrap.min.js" %}" ></script>
+    {% block stylesheet %}{% endblock stylesheet %}
+    <script src="{% static "js/jquery-3.1.1.slim.min.js" %}" ></script>
+    {% block javascript %}{% endblock javascript %}
     <title>Magic card game</title>
 </head>
 <body>

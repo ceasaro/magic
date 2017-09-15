@@ -1,13 +1,24 @@
 {% extends 'base.html' %}
+{% load static magic_tags %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static "game/css/magic.css" %}">
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script src="{% static 'game/js/cards.js' %}"></script>
+{% endblock javascript %}
+
+
 {% block container %}
     <div class="row">
         <div class="col">
             {% for player in game.players %}
                 <h2>{{ player.name }}</h2>
                 <ul>
-                {% for card in player.library.cards %}
-                    <li>{{ card.name }}  <img src="{{MEDIA_URL}}{{card.image}}">({{ card.set.code }})</li>
-                {% endfor %}
+                    {% for card in player.library.cards %}
+                        <li>{{ card.name }} {{ card|card_img:120 }}({{ card.set.code }})</li>
+                    {% endfor %}
                 </ul>
             {% endfor %}
         </div>
