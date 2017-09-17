@@ -1,4 +1,5 @@
 from magic.settings.django import *
+from magic.settings.restframework import *
 
 # wrapped in try except so import don't grey out in editor :-)
 # or accidentally removed with an import optimization

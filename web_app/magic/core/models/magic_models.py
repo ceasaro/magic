@@ -42,7 +42,7 @@ def card_image_path(instance, filename):
 
 class Card(models.Model, CardTypes):
     name = models.CharField(max_length=256)
-    _image = models.FileField(upload_to=card_image_path, null=True, blank=True)
+    image = models.FileField(upload_to=card_image_path, null=True, blank=True)
     external_id = models.CharField(primary_key=True, max_length=50, editable=False)
     set = models.ForeignKey(Set, blank=False, null=True, related_name='cards')
     _types = models.CharField(max_length=1024)
@@ -57,8 +57,8 @@ class Card(models.Model, CardTypes):
     unique_together = (("name", "set"),)
 
     @property
-    def image(self):
-        if not self._image:
+    def download_image(self):
+        if not self.image:
             img_url = import_card_image(self.name)
             img_model_name = card_image_path(self, img_url)
             img_file_name = os.path.join(settings.MEDIA_ROOT, img_model_name)
@@ -69,10 +69,10 @@ class Card(models.Model, CardTypes):
                     if exc.errno != errno.EEXIST:
                         raise
             urlretrieve(img_url, img_file_name)
-            self._image = img_model_name
+            self.image = img_model_name
             self.save()
             pass
-        return self._image
+        return self.image
 
     @property
     def power(self):
@@ -102,10 +102,10 @@ class Card(models.Model, CardTypes):
     @property
     def mana_source(self):
         codes = self.text_codes
-        total_mana = colourless_mana = white_mana = blue_mana = black_mana = red_mana = green_mana = 0
+        total_mana = any_mana = white_mana = blue_mana = black_mana = red_mana = green_mana = 0
         if codes:
-            colourless_mana = codes.count(Mana.COLOURLESS)
-            total_mana += colourless_mana
+            any_mana = codes.count(Mana.ANY)
+            total_mana += any_mana
             white_mana = codes.count(Mana.WHITE)
             total_mana += white_mana
             blue_mana = codes.count(Mana.BLUE)
@@ -131,7 +131,7 @@ class Card(models.Model, CardTypes):
             elif land_types.FOREST in card_types:
                 green_mana += 1
 
-        return Mana(colourless=colourless_mana,
+        return Mana(any=any_mana,
                     white=white_mana,
                     blue=blue_mana,
                     black=black_mana,

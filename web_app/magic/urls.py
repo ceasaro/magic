@@ -19,11 +19,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 
+from magic.core.api import urls as core_api_urls
 from magic.game import urls as game_urls
+from magic.magic_admin import urls as magic_admin_urls
 
 urlpatterns = [
     # url(r'^about/$', TemplateView.as_view(template_name="about.html")),
     url(r'^game/', include(game_urls, namespace='game')),
+    url(r'^api/', include(core_api_urls, namespace='api')),
+    url(r'^magic_admin/', include(magic_admin_urls, namespace='magic_admin')),
     url(r'^admin/', admin.site.urls),
     url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
