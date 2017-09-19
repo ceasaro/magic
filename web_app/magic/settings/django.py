@@ -38,17 +38,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'corsheaders',
     'django_extensions',
     'rest_framework',
 
     'magic.core',
     'magic.game',
-    'magic.magic_admin',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -128,3 +129,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'MEDIA')
 MEDIA_URL = '/media/'
+
+CORS_ORIGIN_WHITELIST = (
+    '127.0.0.1:3000',
+    'localhost:3000',
+)

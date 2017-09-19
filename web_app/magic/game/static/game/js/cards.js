@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log('cards loaded');
+
     $('img.hover-enlarge').mouseenter(
         function () {
             let $img = $(this),
@@ -14,4 +14,11 @@ $(document).ready(function () {
                     $('.large-hovering-img').remove();
                 });
         });
+
+    $('#search-card').select2({
+        ajax: {
+            url: '/api/cards/',
+            dataType: 'json'
+        }
+    });
 });
