@@ -36,4 +36,5 @@ class Command(BaseCommand):
         elif options['sets']:
             mtgjson.import_sets(json.load(open(self.all_sets_json, 'r')), verbosity=options['verbosity'])
         else:
-            print ('No valid options specified! type ./manage import_mtgjson -h for more info.')
+            command_name = os.path.splitext(os.path.basename(__file__))[0]
+            print ("No valid options specified! type './manage.py {} -h' for more info.".format(command_name))

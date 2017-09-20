@@ -56,9 +56,8 @@ class Card(models.Model, CardTypes):
 
     unique_together = (("name", "set"),)
 
-    @property
-    def download_image(self):
-        if not self.image:
+    def download_image(self, refresh=False):
+        if not self.image or refresh:
             img_url = import_card_image(self.name)
             img_model_name = card_image_path(self, img_url)
             img_file_name = os.path.join(settings.MEDIA_ROOT, img_model_name)
@@ -71,7 +70,6 @@ class Card(models.Model, CardTypes):
             urlretrieve(img_url, img_file_name)
             self.image = img_model_name
             self.save()
-            pass
         return self.image
 
     @property
