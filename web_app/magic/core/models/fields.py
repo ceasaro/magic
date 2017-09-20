@@ -11,12 +11,12 @@ EXCEPTIONAL_MANA = [
 
 class Mana(object):
     ANY = ''
-    COLOURLESS = 'C'
     WHITE = 'W'
     BLUE = 'U'
-    GREEN = 'G'
-    RED = 'R'
     BLACK = 'B'
+    RED = 'R'
+    GREEN = 'G'
+    COLOURLESS = 'C'
 
     def __init__(self, *args, any=0, white=0, blue=0, black=0, red=0, green=0, colourless=0):
         self.any = any

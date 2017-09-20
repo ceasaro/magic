@@ -27,12 +27,21 @@ class CardViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Card.objects.all()
-        q = self.request.query_params.get('q', None)
-        if q:
-            queryset = queryset.filter(name__icontains=q)
-        set_name = self.request.query_params.get('s', None)
+        params = self.request.query_params
+        set_name = params.get('s')
         if set_name:
             queryset = queryset.filter(set__name=set_name)
+        queryset = queryset.search(
+            q=self.request.query_params.get('q'),  # search query
+            a=self.request.query_params.get('a'),  # any mana
+            w=self.request.query_params.get('w'),  # white mana
+            u=self.request.query_params.get('u'),  # blue mana
+            b=self.request.query_params.get('b'),  # black mana
+            r=self.request.query_params.get('r'),  # read mana
+            g=self.request.query_params.get('g'),  # green mana
+            c=self.request.query_params.get('c'),  # colorless mana
+        )
+
         return queryset
 
     @detail_route()

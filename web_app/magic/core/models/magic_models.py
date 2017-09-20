@@ -40,6 +40,39 @@ def card_image_path(instance, filename):
     return 'CARD_IMAGES/{0}/{1}{2}'.format(slugify(instance.set.name), slugify(instance.name), img_ext)
 
 
+class CardQuerySet(models.QuerySet):
+
+    def search(self, q=None, a=None, w=None, u=None, b=None, r=None, g=None, c=None):
+        query_set = self
+
+        def filter_mana(mana, mana_value):
+
+            if mana_value:
+                if isinstance(mana_value, int):
+                    mana_query = mana * mana_value
+                elif isinstance(mana_value, str) and mana_value.upper().replace(mana, '') == '':
+                    mana_query = mana_value.upper()
+                else:
+                    mana_query = None
+                if mana_query:
+                    return query_set.filter(mana_cost__contains=mana_query)
+                else:
+                    return query_set.none()
+            return query_set
+
+
+        if q:
+            query_set = query_set.filter(name__icontains=q)
+        query_set = filter_mana(Mana.ANY, a)
+        query_set = filter_mana(Mana.WHITE, w)
+        query_set = filter_mana(Mana.BLUE, u)
+        query_set = filter_mana(Mana.BLACK, b)
+        query_set = filter_mana(Mana.RED, r)
+        query_set = filter_mana(Mana.GREEN, g)
+        query_set = filter_mana(Mana.COLOURLESS, c)
+        return query_set
+
+
 class Card(models.Model, CardTypes):
     name = models.CharField(max_length=256)
     image = models.FileField(upload_to=card_image_path, null=True, blank=True)
@@ -55,6 +88,8 @@ class Card(models.Model, CardTypes):
     _toughness = models.CharField(max_length=4)
 
     unique_together = (("name", "set"),)
+
+    objects = CardQuerySet.as_manager()
 
     def download_image(self, refresh=False):
         if not self.image or refresh:

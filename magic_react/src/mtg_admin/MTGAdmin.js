@@ -29,8 +29,16 @@ class MTGAdmin extends Component {
                 <div className="row navigation">
                     <div className="col">
                         <div className="form-group">
-                            <label htmlFor="usr">Search cards:</label>
-                            <input type="text" className="form-control" id="usr" onChange={this.handleSearchChange.bind(this)}/>
+                            <label htmlFor="search_card">Search cards:</label>
+                            <input type="text" className="form-control" id="search_card" onChange={this.handleSearchChange.bind(this)}/>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="form-group">
+                            <label htmlFor="filter_red">Red:</label>
+                            <input type="text" className="form-control" id="filter_red" onChange={this.handleFilterRed.bind(this)}/>
+                            <label htmlFor="filter_blue">Blue:</label>
+                            <input type="text" className="form-control" id="filter_blue" onChange={this.handleFilterBlue.bind(this)}/>
                         </div>
                     </div>
                     <div className="col">
@@ -74,6 +82,20 @@ class MTGAdmin extends Component {
         this.setState({deck_cards: deck_cards})
     }
 
+    handleFilterRed(event) {
+        let red = event.target.value;
+        if (red.length > 0) {
+            this.loadData({r:red})
+        }
+    }
+
+    handleFilterBlue(event) {
+        let blue = event.target.value;
+        if (blue.length > 0) {
+            this.loadData({u:blue})
+        }
+    }
+
     handleSearchChange(event) {
         let query = event.target.value;
         if (query.length > 2) {
@@ -83,14 +105,26 @@ class MTGAdmin extends Component {
 
     loadData(opts) {
         let options = _.extend({next:false, previous:false, q:null}, opts),
-            url = '/api/cards/';
+            url = '/api/cards/',
+            query_string = '';
         if (options.next) {
             url = this.state.next
         } else if (options.previous) {
             url = this.state.previous
-        } else if (options.q) {
-            url += '?q=' + options.q
+        } else  {
+            query_string+= 'q='+(options.q?options.q:'') + '&';  // search query
+            query_string+= 'a='+(options.a?options.a:'') + '&';  // any mana
+            query_string+= 'w='+(options.w?options.w:'') + '&';  // white mana
+            query_string+= 'u='+(options.u?options.u:'') + '&';  // blue mana
+            query_string+= 'b='+(options.b?options.b:'') + '&';  // black mana
+            query_string+= 'r='+(options.r?options.r:'') + '&';  // red mana
+            query_string+= 'g='+(options.g?options.g:'') + '&';  // green mana
+            query_string+= 'c='+(options.c?options.c:'') + '&';  // colorless mana
         }
+        if (query_string) {
+            url += '?' + query_string
+        }
+
         return MagicAPI.get(url).then(data => {
             this.setState({
                 next: data.next,
