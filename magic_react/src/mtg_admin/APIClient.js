@@ -4,11 +4,6 @@ let MagicAPI = {
     'get': function (path, get_options) {
         return this._fetch(path, get_options)
     },
-    '_fetch': function (path, options) {
-        return window
-            .fetch('http://localhost:8000' + path, options)
-            .then(response => response.json())
-    },
     'post': function (path, post_options) {
         _.extend({method: 'post'}, post_options);
         return this._fetch(path, post_options)
@@ -20,7 +15,12 @@ let MagicAPI = {
     'remove': function (path, delete_options) {
         _.extend({method: 'delete'}, delete_options);
         return this._fetch(path, delete_options)
-    }
+    },
+    '_fetch': function (path, options) {
+        return window
+            .fetch(path.startsWith('http')? path: 'http://localhost:8000' + path, options)
+            .then(response => response.json())
+    },
 };
 
 
