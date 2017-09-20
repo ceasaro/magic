@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './MTGAdmin.css';
 import MagicAPI from './APIClient'
 import Card from './Cards';
+import _ from 'lodash'
 
 class MTGAdmin extends Component {
     constructor() {
@@ -26,8 +27,24 @@ class MTGAdmin extends Component {
                     </div>
                 </div>
                 <div className="row navigation">
-                    <div className="col"><button className="btn btn-primary" type="submit" onClick={() => this.loadData('previous')}>Previous</button></div>
-                    <div className="col"><button className="btn btn-primary" type="submit" onClick={() => this.loadData('next')}>Next</button></div>
+                    <div className="col">
+                        <div className="form-group">
+                            <label htmlFor="usr">Search cards:</label>
+                            <input type="text" className="form-control" id="usr" onChange={this.handleSearchChange.bind(this)}/>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <button className="btn btn-primary" type="submit"
+                                onClick={() => this.loadData({'previous': true})}>
+                            Previous
+                        </button>
+                    </div>
+                    <div className="col">
+                        <button className="btn btn-primary" type="submit"
+                                onClick={() => this.loadData({'next': true})}>
+                            Next
+                        </button>
+                    </div>
                 </div>
                 <div className="row all-cards">
                     {all_cards}
@@ -43,14 +60,23 @@ class MTGAdmin extends Component {
         this.loadData();
     }
 
-    loadData(option) {
-        let url = '/api/cards/';
-        if (option === 'next') {
-            url = this.state.next
-        } else if (option === 'previous') {
-            url = this.state.previous
+    handleSearchChange(event) {
+        let query = event.target.value;
+        if (query.length > 2) {
+            this.loadData({q:query})
         }
-        console.log(url);
+    }
+
+    loadData(opts) {
+        let options = _.extend({next:false, previous:false, q:null}, opts),
+            url = '/api/cards/';
+        if (options.next) {
+            url = this.state.next
+        } else if (options.previous) {
+            url = this.state.previous
+        } else if (options.q) {
+            url += '?q=' + options.q
+        }
         return MagicAPI.get(url).then(data => {
             this.setState({
                 next: data.next,
