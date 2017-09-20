@@ -36,7 +36,10 @@ class Command(BaseCommand):
             self.download_image(Card.objects.filter(name=options['card']), refresh=refresh)
         elif options['all']:
             if console_confirm('Are yo sure you want to download all missing card images, this can take a while.?'):
-                self.download_image(Card.objects.all(), refresh=refresh)
+                if refresh:
+                    self.download_image(Card.objects.all(), refresh=refresh)
+                else:
+                    self.download_image(Card.objects.filter(image__isnull=not refresh))
             else:
                 print ("Downloading card images aborted")
         else:
@@ -44,12 +47,14 @@ class Command(BaseCommand):
             print ("No valid options specified! type './manage.py {} -h' for more info.".format(command_name))
 
     def download_image(self, cards, refresh=False):
-        for card in cards:
+        total = len(cards)
+        for i, card in enumerate(cards):
             try:
                 card.download_image(refresh=refresh)
-                print("downloaded image for card '{}'".format(card))
+                message = "downloaded image for card '{}'".format(card)
             except:
-                print("ERROR downloading image for card '{}'".format(card))
+                message = "ERROR downloading image for card '{}'".format(card)
+            print ("{}/{}: {}".format(i, total, message))
 
 
 def console_confirm(msg):
