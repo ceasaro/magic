@@ -15,10 +15,10 @@ class MTGAdmin extends Component {
 
     render() {
         const all_cards = this.state.all_cards.map((card) =>
-            <div key={card.external_id} className="col"><Card card={card} height={120}/></div>
+            <div key={card.external_id} className="col"><Card card={card} height={120} onClick={() => this.handleAllCardsClick(card)}/></div>
         );
-        const deck_cards = this.state.deck_cards.map((card) =>
-            <div key={card.external_id} className="col"><Card card={card} height={120}/></div>
+        const deck_cards = this.state.deck_cards.map((deck_card, index) =>
+            <div key={deck_card.external_id + '_' + index} className="col">{deck_card.name}<Card card={deck_card} height={120} onClick={() => this.handleDeckCardsClick(deck_card)}/></div>
         );
         return (
             <div className="container-fluid">
@@ -49,7 +49,7 @@ class MTGAdmin extends Component {
                 <div className="row all-cards">
                     {all_cards}
                 </div>
-                <div className="row all-cards">
+                <div className="row deck-cards">
                     {deck_cards}
                 </div>
             </div>
@@ -58,6 +58,20 @@ class MTGAdmin extends Component {
 
     componentDidMount() {
         this.loadData();
+    }
+
+    handleAllCardsClick(card) {
+        let deck_cards = this.state.deck_cards.splice(0);
+        deck_cards.push(card);
+        this.setState({deck_cards: deck_cards})
+    }
+
+    handleDeckCardsClick(card) {
+        let deck_cards = this.state.deck_cards.splice(0);
+        _.remove(deck_cards, function(c) {
+            return card.external_id === c.external_id
+        });
+        this.setState({deck_cards: deck_cards})
     }
 
     handleSearchChange(event) {

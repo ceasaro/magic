@@ -36,19 +36,10 @@ class Card extends Component {
         };
         return (<div className='card-img-wrapper' >
             <img alt={card.name} {...img_props} id={card.external_id}
-                 onMouseEnter={() => this.onMouseEnter()} onMouseLeave={() => this.onMouseLeave()}/>
+                 onMouseEnter={() => this.onMouseEnter()} onMouseLeave={() => this.onMouseLeave()} onClick={this.props.onClick}/>
         </div>)
     }
 
-    // componentDidMount() {
-    //     this.loadData().then(data => {
-    //         this.setState(data);
-    //     })
-    // }
-    //
-    // loadData() {
-    //     return MagicAPI.get('/api/cards/' + this.props.card_id + '/').then(data => data)
-    // }
 }
 
 export default Card;
