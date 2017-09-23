@@ -10,7 +10,9 @@ class Card extends Component {
             card: options.card,
             height: options.height,
             original_height: options.height,
-            previous_state: {}
+            previous_state: {},
+            loading: false,
+            error_fetching_img: false,
         };
     }
 
@@ -35,26 +37,44 @@ class Card extends Component {
             width: null,
             className: same_size ? 'hover-enlarge' : 'large-hovering-img'
         };
-        let image_html = []
+        let image_html = [];
         if (img_url) {
             image_html.push(<img alt={card.name} {...img_props} id={card.external_id}
-                                   onMouseEnter={() => this.onMouseEnter()} onMouseLeave={() => this.onMouseLeave()}
-                                   onClick={this.props.onClick}/>)
+                                 onMouseEnter={() => this.onMouseEnter()} onMouseLeave={() => this.onMouseLeave()}
+                                 onClick={this.props.onClick}/>)
+        } else if (this.state.loading) {
+            image_html.push(<div className="loader">Loading...</div>)
+        } else if (this.state.error_fetching_img) {
+            image_html.push(<div className="error">Could not download image of {this.state.card.name}</div>)
         } else {
-            image_html.push(<span onClick={this.downloadImage.bind(this)}>download</span>)
+            image_html.push(
+                <div>
+                    <button className="btn btn-primary" type="submit" onClick={this.downloadImage.bind(this)}>Download
+                    </button>
+                </div>)
         }
         return (<div className='card-img-wrapper'>
+            <div className='card-name'>{this.state.card.name}</div>
             {image_html}
         </div>)
     }
 
     downloadImage() {
-        console.log('downloading '+ this.state.card.external_id)
-        MagicAPI.put('/api/cards/'+this.state.card.external_id+'/download_img/').then(data => {
-            this.setState({card: data})
-        })
+        this.setState({loading: true});
+        MagicAPI.put('/api/cards/' + this.state.card.external_id + '/download_img/')
+            .then(data => {
+                this.setState({
+                    card: data,
+                    loading: false
+                })
+            })
+            .catch(error => {
+                this.setState({
+                    loading: false,
+                    error_fetching_img: true
+                })
+            })
     }
-
 }
 
 export default Card;

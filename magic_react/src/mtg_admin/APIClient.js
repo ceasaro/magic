@@ -23,9 +23,15 @@ let MagicAPI = {
     _fetch: function (path, options) {
         return window
             .fetch(path.startsWith('http')? path: this.API_DOMAIN + path, options)
+            .then(this._handleErrors)
             .then(response => response.json())
     },
-
+    _handleErrors: function(response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
+}
 };
 
 

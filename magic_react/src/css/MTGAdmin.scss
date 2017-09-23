@@ -1,3 +1,5 @@
+@import "components/loader";
+
 .App {
     text-align: center;
 }
@@ -26,7 +28,36 @@
         transform: rotate(360deg);
     }
 }
-
+#mtg_admin {
+  .filtering {
+    .mana-filter-selectors {
+      .mana-big, .mtg-minus {
+        cursor: pointer;
+      }
+    }
+    .mana-filter {
+      height: 20px;
+    }
+  }
+  .card-img-wrapper {
+    .card-name {
+      font-size: 8pt;
+      height: 33px;
+    }
+    img{
+      display:block;
+      margin: auto;
+    }
+    background-color:#EEE;
+    margin:10px 0;
+    padding: 10px;
+    width: 100px;
+  }
+  .footer {
+    margin-top: 50px;
+    height:220px;
+  }
+}
 /* mana icons */
 .mana-big {
     background-image: url(../img/mana-sprite-30x30.png);

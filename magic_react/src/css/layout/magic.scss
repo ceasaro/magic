@@ -1,0 +1,11 @@
+.card-img-wrapper {
+  position: relative;
+}
+
+.large-hovering-img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  overflow: auto;
+}

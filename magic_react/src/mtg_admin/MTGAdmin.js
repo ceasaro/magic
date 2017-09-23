@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import './MTGAdmin.css';
+import '../css/MTGAdmin.css';
+import '../css/layout/magic.css';
 import MagicAPI from './APIClient'
 import Card from './Cards';
 import Mana from './Mana';
@@ -44,16 +45,16 @@ class MTGAdmin extends Component {
                     <div className="col"><h2>Create a deck</h2>
                     </div>
                 </div>
-                <div className="row navigation">
-                    <div className="col">
+                <div className="row filtering">
+                    <div className="col-3">
                         <div className="form-group">
-                            <label htmlFor="search_card">Search cards:</label>
+                            <label className="filter-label" htmlFor="search_card">Search cards:</label>
                             <input type="text" className="form-control" id="search_card"
                                    onChange={this.handleSearchChange.bind(this)}/>
                         </div>
                     </div>
-                    <div className="col">
-                        <h4>Mana</h4>
+                    <div className="col-3">
+                        <label className="filter-label">Mana</label>
                         <div className="mana-filter-selectors">
                             <div className="mana-filter-selector" data-mana="w">
                                 <i className="mana-big w" onClick={this.handleManaFilter.bind(this)}/>
@@ -78,6 +79,20 @@ class MTGAdmin extends Component {
                         </div>
                         <Mana mana={this.state.filter.mana}/>
                     </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <div className="row all-cards">
+                            {all_cards}
+                        </div>
+                        <div className="row deck-cards">
+                            {deck_cards}
+                        </div>
+                    </div>
+                    <div className="col-2">
+                    </div>
+                </div>
+                <div className="row footer">
                     <div className="col">
                         <button className="btn btn-primary" type="submit" {...previous_button_attrs}
                                 onClick={() => this.loadData({'previous': true})}>
@@ -91,13 +106,7 @@ class MTGAdmin extends Component {
                         </button>
                     </div>
                 </div>
-                <div className="row all-cards">
-                    {all_cards}
-                </div>
-                <div className="row deck-cards">
-                    {deck_cards}
-                </div>
-            </div>
+            </div> // container-fluid
         );
     }
 
@@ -122,9 +131,15 @@ class MTGAdmin extends Component {
     handleManaFilter(event) {
         let mana = event.target.parentElement.getAttribute('data-mana'),
             minus = event.target.getAttribute('class'),
-            plus_min = minus.indexOf('mtg-minus') >= 0 ? -1 : 1;
-        const new_filter= update(this.state.filter, { mana: {
-            [mana]: {$set: this.state.filter.mana[mana] + plus_min}},
+            plus_min = minus.indexOf('mtg-minus') >= 0 ? -1 : 1,
+            mana_count = this.state.filter.mana[mana] + plus_min;
+        if (mana_count < 0) {
+            mana_count = 0;
+        }
+        const new_filter = update(this.state.filter, {
+            mana: {
+                [mana]: {$set: mana_count}
+            },
         });
         this.setState({filter: new_filter});
         this.loadData(new_filter)
