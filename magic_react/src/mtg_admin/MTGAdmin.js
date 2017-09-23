@@ -77,12 +77,6 @@ class MTGAdmin extends Component {
                             </div>
                         </div>
                         <Mana mana={this.state.filter.mana}/>
-                        {/*<div className="form-group">*/}
-                        {/*<label htmlFor="filter_red">Red:</label>*/}
-                        {/*<input type="text" className="form-control" id="filter_red" onChange={this.handleFilterRed.bind(this)}/>*/}
-                        {/*<label htmlFor="filter_blue">Blue:</label>*/}
-                        {/*<input type="text" className="form-control" id="filter_blue" onChange={this.handleFilterBlue.bind(this)}/>*/}
-                        {/*</div>*/}
                     </div>
                     <div className="col">
                         <button className="btn btn-primary" type="submit" {...previous_button_attrs}
