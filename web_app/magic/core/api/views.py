@@ -1,6 +1,7 @@
 from PIL import Image
 from django.http import HttpResponse
 from rest_framework.decorators import detail_route
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from magic.core.api.serializers import CardSerializer, SetSerializer
@@ -55,3 +56,10 @@ class CardViewSet(ModelViewSet):
             response = HttpResponse(content_type="image/png")
             red.save(response, "PNG")
             return response
+
+    @detail_route()
+    def download_img(self, request, pk):
+        card = self.get_object()
+        card.download_image()
+        serializer = self.serializer_class(card)
+        return Response(serializer.data)
