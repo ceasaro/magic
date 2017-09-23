@@ -1,24 +1,148 @@
 .App {
-  text-align: center;
-}
+  text-align: center; }
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
+  height: 80px; }
 
 .App-header {
   background-color: #222;
   height: 150px;
   padding: 20px;
-  color: white;
-}
+  color: white; }
 
 .App-intro {
-  font-size: large;
-}
+  font-size: large; }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+/* mana icons */
+.mana-big {
+  background-image: url(../img/mana-sprite-30x30.png);
+  display: inline-block;
+  height: 30px;
+  width: 30px; }
+  .mana-big.a0 {
+    background-position: 0 0; }
+  .mana-big.a1 {
+    background-position: -30px 0; }
+  .mana-big.a2 {
+    background-position: -60px 0; }
+  .mana-big.a3 {
+    background-position: -90px 0; }
+  .mana-big.a4 {
+    background-position: -120px 0; }
+  .mana-big.a5 {
+    background-position: -150px 0; }
+  .mana-big.a6 {
+    background-position: -180px 0; }
+  .mana-big.a7 {
+    background-position: -210px 0; }
+  .mana-big.a8 {
+    background-position: -240px 0; }
+  .mana-big.a9 {
+    background-position: -270px 0; }
+  .mana-big.a10 {
+    background-position: 0 -30px; }
+  .mana-big.a11 {
+    background-position: -30px -30px; }
+  .mana-big.a12 {
+    background-position: -60px -30px; }
+  .mana-big.a13 {
+    background-position: -90px -30px; }
+  .mana-big.a14 {
+    background-position: -120px -30px; }
+  .mana-big.a15 {
+    background-position: -150px -30px; }
+  .mana-big.a16 {
+    background-position: -180px -30px; }
+  .mana-big.a17 {
+    background-position: -210px -30px; }
+  .mana-big.a18 {
+    background-position: -240px -30px; }
+  .mana-big.a19 {
+    background-position: -270px -30px; }
+  .mana-big.white, .mana-big.w {
+    background-position: -120px -60px; }
+  .mana-big.blue, .mana-big.u {
+    background-position: -150px -60px; }
+  .mana-big.black, .mana-big.b {
+    background-position: -180px -60px; }
+  .mana-big.red, .mana-big.r {
+    background-position: -210px -60px; }
+  .mana-big.green, .mana-big.g {
+    background-position: -240px -60px; }
+
+.mana {
+  background-image: url(../img/mana-sprite-15x15.png);
+  display: inline-block;
+  height: 15px;
+  width: 15px; }
+  .mana.a0 {
+    background-position: 0 0; }
+  .mana.a1 {
+    background-position: -15px 0; }
+  .mana.a2 {
+    background-position: -30px 0; }
+  .mana.a3 {
+    background-position: -45px 0; }
+  .mana.a4 {
+    background-position: -60px 0; }
+  .mana.a5 {
+    background-position: -75px 0; }
+  .mana.a6 {
+    background-position: -90px 0; }
+  .mana.a7 {
+    background-position: -105px 0; }
+  .mana.a8 {
+    background-position: -120px 0; }
+  .mana.a9 {
+    background-position: -135px 0; }
+  .mana.a15 {
+    background-position: 0 -15px; }
+  .mana.a11 {
+    background-position: -15px -15px; }
+  .mana.a12 {
+    background-position: -30px -15px; }
+  .mana.a13 {
+    background-position: -45px -15px; }
+  .mana.a14 {
+    background-position: -60px -15px; }
+  .mana.a15 {
+    background-position: -75px -15px; }
+  .mana.a16 {
+    background-position: -90px -15px; }
+  .mana.a17 {
+    background-position: -105px -15px; }
+  .mana.a18 {
+    background-position: -120px -15px; }
+  .mana.a19 {
+    background-position: -135px -15px; }
+  .mana.white, .mana.w {
+    background-position: -60px -30px; }
+  .mana.blue, .mana.u {
+    background-position: -75px -30px; }
+  .mana.black, .mana.b {
+    background-position: -90px -30px; }
+  .mana.red, .mana.r {
+    background-position: -105px -30px; }
+  .mana.green, .mana.g {
+    background-position: -120px -30px; }
+
+.mtg-minus {
+  background-image: url(../img/mtg-minus.png);
+  background-position: 8px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 30px;
+  width: 30px; }
+
+.mana-filter-selectors .mana-filter-selector {
+  display: inline-block; }
+  .mana-filter-selectors .mana-filter-selector .mana-big {
+    display: block; }
+
+/*# sourceMappingURL=MTGAdmin.css.map */

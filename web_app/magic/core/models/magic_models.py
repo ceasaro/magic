@@ -48,8 +48,8 @@ class CardQuerySet(models.QuerySet):
         def filter_mana(mana, mana_value):
 
             if mana_value:
-                if isinstance(mana_value, int):
-                    mana_query = mana * mana_value
+                if isinstance(mana_value, int) or (isinstance(mana_value, str) and mana_value.isdigit() ):
+                    mana_query = mana * int(mana_value)
                 elif isinstance(mana_value, str) and mana_value.upper().replace(mana, '') == '':
                     mana_query = mana_value.upper()
                 else:

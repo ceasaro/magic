@@ -1,0 +1,109 @@
+.App {
+    text-align: center;
+}
+
+.App-logo {
+    animation: App-logo-spin infinite 20s linear;
+    height: 80px;
+}
+
+.App-header {
+    background-color: #222;
+    height: 150px;
+    padding: 20px;
+    color: white;
+}
+
+.App-intro {
+    font-size: large;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* mana icons */
+.mana-big {
+    background-image: url(../img/mana-sprite-30x30.png);
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    &.a0 {background-position: 0 0;}
+    &.a1 {background-position: -30px 0;}
+    &.a2 {background-position: -60px 0;}
+    &.a3 {background-position: -90px 0;}
+    &.a4 {background-position: -120px 0;}
+    &.a5 {background-position: -150px 0;}
+    &.a6 {background-position: -180px 0;}
+    &.a7 {background-position: -210px 0;}
+    &.a8 {background-position: -240px 0;}
+    &.a9 {background-position: -270px 0;}
+    &.a10 {background-position: 0 -30px;}
+    &.a11 {background-position: -30px -30px;}
+    &.a12 {background-position: -60px -30px;}
+    &.a13 {background-position: -90px -30px;}
+    &.a14 {background-position: -120px -30px;}
+    &.a15 {background-position: -150px -30px;}
+    &.a16 {background-position: -180px -30px;}
+    &.a17 {background-position: -210px -30px;}
+    &.a18 {background-position: -240px -30px;}
+    &.a19 {background-position: -270px -30px;}
+    &.white, &.w { background-position: -120px -60px;}
+    &.blue, &.u { background-position: -150px -60px;}
+    &.black, &.b { background-position: -180px -60px;}
+    &.red, &.r { background-position: -210px -60px;}
+    &.green, &.g { background-position: -240px -60px;}
+}
+
+.mana {
+    background-image: url(../img/mana-sprite-15x15.png);
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    &.a0 {background-position: 0 0;}
+    &.a1 {background-position: -15px 0;}
+    &.a2 {background-position: -30px 0;}
+    &.a3 {background-position: -45px 0;}
+    &.a4 {background-position: -60px 0;}
+    &.a5 {background-position: -75px 0;}
+    &.a6 {background-position: -90px 0;}
+    &.a7 {background-position: -105px 0;}
+    &.a8 {background-position: -120px 0;}
+    &.a9 {background-position: -135px 0;}
+    &.a15 {background-position: 0 -15px;}
+    &.a11 {background-position: -15px -15px;}
+    &.a12 {background-position: -30px -15px;}
+    &.a13 {background-position: -45px -15px;}
+    &.a14 {background-position: -60px -15px;}
+    &.a15 {background-position: -75px -15px;}
+    &.a16 {background-position: -90px -15px;}
+    &.a17 {background-position: -105px -15px;}
+    &.a18 {background-position: -120px -15px;}
+    &.a19 {background-position: -135px -15px;}
+    &.white, &.w { background-position: -60px -30px;}
+    &.blue, &.u { background-position: -75px -30px;}
+    &.black, &.b { background-position: -90px -30px;}
+    &.red, &.r { background-position: -105px -30px;}
+    &.green, &.g { background-position: -120px -30px;}
+}
+.mtg-minus {
+  background-image: url(../img/mtg-minus.png);
+  background-position: 8px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+}
+.mana-filter-selectors {
+  .mana-filter-selector {
+    display: inline-block;
+    .mana-big {
+      display: block;
+    }
+  }
+}

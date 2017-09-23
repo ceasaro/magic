@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import './MTGAdmin.css';
 import MagicAPI from './APIClient'
 import Card from './Cards';
+import Mana from './Mana';
 import _ from 'lodash'
+import update from 'immutability-helper';
 
 class MTGAdmin extends Component {
     constructor() {
@@ -10,15 +12,31 @@ class MTGAdmin extends Component {
         this.state = {
             all_cards: [],
             deck_cards: [],
+            filter: {
+                q: '',
+                mana: {w: 0, u: 0, b: 0, r: 0, g: 0,}
+            }
         }
     }
 
     render() {
+        const next_button_attrs = {};
+        if (!this.state.next) {
+            next_button_attrs['disabled'] = 'disabled'
+        }
+        const previous_button_attrs = {};
+        if (!this.state.previous) {
+            previous_button_attrs['disabled'] = 'disabled'
+        }
         const all_cards = this.state.all_cards.map((card) =>
-            <div key={card.external_id} className="col"><Card card={card} height={120} onClick={() => this.handleAllCardsClick(card)}/></div>
+            <div key={card.external_id} className="col"><Card card={card} height={120}
+                                                              onClick={() => this.handleAllCardsClick(card)}/></div>
         );
         const deck_cards = this.state.deck_cards.map((deck_card, index) =>
-            <div key={deck_card.external_id + '_' + index} className="col">{deck_card.name}<Card card={deck_card} height={120} onClick={() => this.handleDeckCardsClick(deck_card)}/></div>
+            <div key={deck_card.external_id + '_' + index} className="col">{deck_card.name}<Card card={deck_card}
+                                                                                                 height={120}
+                                                                                                 onClick={() => this.handleDeckCardsClick(deck_card)}/>
+            </div>
         );
         return (
             <div className="container-fluid">
@@ -30,25 +48,50 @@ class MTGAdmin extends Component {
                     <div className="col">
                         <div className="form-group">
                             <label htmlFor="search_card">Search cards:</label>
-                            <input type="text" className="form-control" id="search_card" onChange={this.handleSearchChange.bind(this)}/>
+                            <input type="text" className="form-control" id="search_card"
+                                   onChange={this.handleSearchChange.bind(this)}/>
                         </div>
                     </div>
                     <div className="col">
-                        <div className="form-group">
-                            <label htmlFor="filter_red">Red:</label>
-                            <input type="text" className="form-control" id="filter_red" onChange={this.handleFilterRed.bind(this)}/>
-                            <label htmlFor="filter_blue">Blue:</label>
-                            <input type="text" className="form-control" id="filter_blue" onChange={this.handleFilterBlue.bind(this)}/>
+                        <h4>Mana</h4>
+                        <div className="mana-filter-selectors">
+                            <div className="mana-filter-selector" data-mana="w">
+                                <i className="mana-big w" onClick={this.handleManaFilter.bind(this)}/>
+                                <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
+                            </div>
+                            <div className="mana-filter-selector" data-mana="u">
+                                <i className="mana-big blue" onClick={this.handleManaFilter.bind(this)}/>
+                                <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
+                            </div>
+                            <div className="mana-filter-selector" data-mana="b">
+                                <i className="mana-big black" onClick={this.handleManaFilter.bind(this)}/>
+                                <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
+                            </div>
+                            <div className="mana-filter-selector" data-mana="r">
+                                <i className="mana-big red" onClick={this.handleManaFilter.bind(this)}/>
+                                <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
+                            </div>
+                            <div className="mana-filter-selector" data-mana="g">
+                                <i className="mana-big green" onClick={this.handleManaFilter.bind(this)}/>
+                                <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
+                            </div>
                         </div>
+                        <Mana mana={this.state.filter.mana}/>
+                        {/*<div className="form-group">*/}
+                        {/*<label htmlFor="filter_red">Red:</label>*/}
+                        {/*<input type="text" className="form-control" id="filter_red" onChange={this.handleFilterRed.bind(this)}/>*/}
+                        {/*<label htmlFor="filter_blue">Blue:</label>*/}
+                        {/*<input type="text" className="form-control" id="filter_blue" onChange={this.handleFilterBlue.bind(this)}/>*/}
+                        {/*</div>*/}
                     </div>
                     <div className="col">
-                        <button className="btn btn-primary" type="submit"
+                        <button className="btn btn-primary" type="submit" {...previous_button_attrs}
                                 onClick={() => this.loadData({'previous': true})}>
                             Previous
                         </button>
                     </div>
                     <div className="col">
-                        <button className="btn btn-primary" type="submit"
+                        <button className="btn btn-primary" type="submit" {...next_button_attrs}
                                 onClick={() => this.loadData({'next': true})}>
                             Next
                         </button>
@@ -76,55 +119,53 @@ class MTGAdmin extends Component {
 
     handleDeckCardsClick(card) {
         let deck_cards = this.state.deck_cards.splice(0);
-        _.remove(deck_cards, function(c) {
+        _.remove(deck_cards, function (c) {
             return card.external_id === c.external_id
         });
         this.setState({deck_cards: deck_cards})
     }
 
-    handleFilterRed(event) {
-        let red = event.target.value;
-        if (red.length > 0) {
-            this.loadData({r:red})
-        }
-    }
-
-    handleFilterBlue(event) {
-        let blue = event.target.value;
-        if (blue.length > 0) {
-            this.loadData({u:blue})
-        }
+    handleManaFilter(event) {
+        let mana = event.target.parentElement.getAttribute('data-mana'),
+            minus = event.target.getAttribute('class'),
+            plus_min = minus.indexOf('mtg-minus') >= 0 ? -1 : 1;
+        const new_filter= update(this.state.filter, { mana: {
+            [mana]: {$set: this.state.filter.mana[mana] + plus_min}},
+        });
+        this.setState({filter: new_filter});
+        this.loadData(new_filter)
     }
 
     handleSearchChange(event) {
-        let query = event.target.value;
-        if (query.length > 2) {
-            this.loadData({q:query})
-        }
+        let query = event.target.value.length > 2 ? event.target.value : '';
+        const new_filter = update(this.state.filter, {
+            q: {$set: query},
+        });
+        this.setState({filter: new_filter});
+        this.loadData(new_filter)
     }
 
     loadData(opts) {
-        let options = _.extend({next:false, previous:false, q:null}, opts),
+        let options = _.extend({next: false, previous: false, q: '', mana: {w: 0, u: 0, b: 0, r: 0, g: 0,}}, opts),
             url = '/api/cards/',
             query_string = '';
         if (options.next) {
             url = this.state.next
         } else if (options.previous) {
             url = this.state.previous
-        } else  {
-            query_string+= 'q='+(options.q?options.q:'') + '&';  // search query
-            query_string+= 'a='+(options.a?options.a:'') + '&';  // any mana
-            query_string+= 'w='+(options.w?options.w:'') + '&';  // white mana
-            query_string+= 'u='+(options.u?options.u:'') + '&';  // blue mana
-            query_string+= 'b='+(options.b?options.b:'') + '&';  // black mana
-            query_string+= 'r='+(options.r?options.r:'') + '&';  // red mana
-            query_string+= 'g='+(options.g?options.g:'') + '&';  // green mana
-            query_string+= 'c='+(options.c?options.c:'') + '&';  // colorless mana
+        } else {
+            query_string += 'q=' + (options.q ? options.q : '') + '&';  // search query
+            query_string += 'a=' + (options.mana.a ? options.mana.a : '') + '&';  // any mana
+            query_string += 'w=' + (options.mana.w ? options.mana.w : '') + '&';  // white mana
+            query_string += 'u=' + (options.mana.u ? options.mana.u : '') + '&';  // blue mana
+            query_string += 'b=' + (options.mana.b ? options.mana.b : '') + '&';  // black mana
+            query_string += 'r=' + (options.mana.r ? options.mana.r : '') + '&';  // red mana
+            query_string += 'g=' + (options.mana.g ? options.mana.g : '') + '&';  // green mana
+            query_string += 'c=' + (options.mana.c ? options.mana.c : '') + '&';  // colorless mana
         }
         if (query_string) {
             url += '?' + query_string
         }
-
         return MagicAPI.get(url).then(data => {
             this.setState({
                 next: data.next,
