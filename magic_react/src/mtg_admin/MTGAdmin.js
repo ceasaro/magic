@@ -4,6 +4,7 @@ import '../css/layout/magic.css';
 import MagicAPI from './APIClient'
 import Card from './Cards';
 import Mana from './Mana';
+import SetsFilter from './Sets'
 import _ from 'lodash'
 import update from 'immutability-helper';
 
@@ -14,6 +15,7 @@ class MTGAdmin extends Component {
             all_cards: [],
             deck_cards: [],
             filter: {
+                sets: [],
                 q: '',
                 mana: {w: 0, u: 0, b: 0, r: 0, g: 0,}
             }
@@ -30,13 +32,13 @@ class MTGAdmin extends Component {
             previous_button_attrs['disabled'] = 'disabled'
         }
         const all_cards = this.state.all_cards.map((card) =>
-            <div key={card.external_id} className="col"><Card card={card} height={120}
-                                                              onClick={() => this.handleAllCardsClick(card)}/></div>
+            <div key={card.external_id} className="col">
+                <Card card={card} height={120} onClick={() => this.handleAllCardsClick(card)}/>
+            </div>
         );
         const deck_cards = this.state.deck_cards.map((deck_card, index) =>
-            <div key={deck_card.external_id + '_' + index} className="col">{deck_card.name}<Card card={deck_card}
-                                                                                                 height={120}
-                                                                                                 onClick={() => this.handleDeckCardsClick(deck_card)}/>
+            <div key={deck_card.external_id + '_' + index} className="col">{deck_card.name}
+                <Card card={deck_card} height={120} onClick={() => this.handleDeckCardsClick(deck_card)}/>
             </div>
         );
         return (
@@ -90,6 +92,7 @@ class MTGAdmin extends Component {
                         </div>
                     </div>
                     <div className="col-2">
+                        <SetsFilter onClick={this.selectMTGSet.bind(this)} selectedSets={this.state.filter.sets}/>
                     </div>
                 </div>
                 <div className="row footer">
@@ -110,22 +113,13 @@ class MTGAdmin extends Component {
         );
     }
 
-    componentDidMount() {
-        this.loadData();
-    }
-
-    handleAllCardsClick(card) {
-        let deck_cards = this.state.deck_cards.splice(0);
-        deck_cards.push(card);
-        this.setState({deck_cards: deck_cards})
-    }
-
-    handleDeckCardsClick(card) {
-        let deck_cards = this.state.deck_cards.splice(0);
-        _.remove(deck_cards, function (c) {
-            return card.external_id === c.external_id
+    handleSearchChange(event) {
+        let query = event.target.value.length > 2 ? event.target.value : '';
+        const new_filter = update(this.state.filter, {
+            q: {$set: query},
         });
-        this.setState({deck_cards: deck_cards})
+        this.setState({filter: new_filter});
+        this.loadData(new_filter)
     }
 
     handleManaFilter(event) {
@@ -145,13 +139,35 @@ class MTGAdmin extends Component {
         this.loadData(new_filter)
     }
 
-    handleSearchChange(event) {
-        let query = event.target.value.length > 2 ? event.target.value : '';
-        const new_filter = update(this.state.filter, {
-            q: {$set: query},
-        });
+    selectMTGSet(event) {
+        const set = event.target.value;
+        let new_filter;
+        if (event.target.checked) {
+            new_filter = update(this.state.filter, {sets: {$push: [set]}});
+        } else {
+            const index = this.state.filter.sets.indexOf(set);
+            new_filter = update(this.state.filter, {sets: {$splice: [[index, 1]]}});
+        }
+
         this.setState({filter: new_filter});
-        this.loadData(new_filter)
+    }
+
+    handleAllCardsClick(card) {
+        let deck_cards = this.state.deck_cards.splice(0);
+        deck_cards.push(card);
+        this.setState({deck_cards: deck_cards})
+    }
+
+    handleDeckCardsClick(card) {
+        let deck_cards = this.state.deck_cards.splice(0);
+        _.remove(deck_cards, function (c) {
+            return card.external_id === c.external_id
+        });
+        this.setState({deck_cards: deck_cards})
+    }
+
+    componentDidMount() {
+        this.loadData();
     }
 
     loadData(opts) {

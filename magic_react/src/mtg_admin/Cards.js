@@ -39,16 +39,16 @@ class Card extends Component {
         };
         let image_html = [];
         if (img_url) {
-            image_html.push(<img alt={card.name} {...img_props} id={card.external_id}
+            image_html.push(<img key={card.external_id} alt={card.name} {...img_props} id={card.external_id}
                                  onMouseEnter={() => this.onMouseEnter()} onMouseLeave={() => this.onMouseLeave()}
                                  onClick={this.props.onClick}/>)
         } else if (this.state.loading) {
-            image_html.push(<div className="loader">Loading...</div>)
+            image_html.push(<div key="card-loader" className="loader">Loading...</div>)
         } else if (this.state.error_fetching_img) {
-            image_html.push(<div className="error">Could not download image of {this.state.card.name}</div>)
+            image_html.push(<div key="card-download-error" className="error">Could not download image of {this.state.card.name}</div>)
         } else {
             image_html.push(
-                <div>
+                <div key="card-download-button">
                     <button className="btn btn-primary" type="submit" onClick={this.downloadImage.bind(this)}>Download
                     </button>
                 </div>)

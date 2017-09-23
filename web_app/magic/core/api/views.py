@@ -1,6 +1,7 @@
 from PIL import Image
 from django.http import HttpResponse
 from rest_framework.decorators import detail_route
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -11,6 +12,11 @@ from magic.core.models import Card, Set
 class SetViewSet(ModelViewSet):
     queryset = Set.objects.all()
     serializer_class = SetSerializer
+    pagination_class = None
+
+
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def get_queryset(self):
         queryset = Set.objects.all()
