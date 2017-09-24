@@ -42,7 +42,7 @@ def card_image_path(instance, filename):
 
 class CardQuerySet(models.QuerySet):
 
-    def search(self, q=None, a=None, w=None, u=None, b=None, r=None, g=None, c=None):
+    def search(self, q=None, a=None, w=None, u=None, b=None, r=None, g=None, c=None, s=None):
         query_set = self
 
         def filter_mana(mana, mana_value):
@@ -70,6 +70,9 @@ class CardQuerySet(models.QuerySet):
         query_set = filter_mana(Mana.RED, r)
         query_set = filter_mana(Mana.GREEN, g)
         query_set = filter_mana(Mana.COLOURLESS, c)
+        if s:
+            s = [s] if isinstance(s, str) else s
+            query_set = query_set.filter(set__name__in=s)
         return query_set
 
 

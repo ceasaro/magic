@@ -74,8 +74,11 @@
   cursor: pointer; }
 #mtg_admin .filtering .mana-filter {
   height: 20px; }
-#mtg_admin .sets-filter .mtg-set.selected {
-  border: 1px solid red; }
+#mtg_admin .sets-filter-wrapper {
+  height: 100px;
+  overflow-y: scroll; }
+  #mtg_admin .sets-filter-wrapper .sets-filter .mtg-set.selected {
+    border: 1px solid red; }
 #mtg_admin .card-img-wrapper {
   background-color: #EEE;
   margin: 10px 0;
@@ -93,7 +96,7 @@
 
 /* mana icons */
 .mana-big {
-  background-image: url(../img/mana-sprite-30x30.png);
+  background-image: url(../img/mtg/mana-sprite-30x30.png);
   display: inline-block;
   height: 30px;
   width: 30px; }
@@ -149,7 +152,7 @@
     background-position: -240px -60px; }
 
 .mana {
-  background-image: url(../img/mana-sprite-15x15.png);
+  background-image: url(../img/mtg/mana-sprite-15x15.png);
   display: inline-block;
   height: 15px;
   width: 15px; }
@@ -204,13 +207,21 @@
   .mana.green, .mana.g {
     background-position: -120px -30px; }
 
-.mtg-minus {
-  background-image: url(../img/mtg-minus.png);
+i.mtg-minus {
+  background-image: url(../img/icons/mtg-minus.png);
   background-position: 8px;
   background-repeat: no-repeat;
   display: inline-block;
   height: 30px;
   width: 30px; }
+
+i.delete {
+  background-image: url(../img/icons/erase_delete_remove_wipe_out-15.png);
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 15px;
+  margin: 0 10px;
+  width: 15px; }
 
 .mana-filter-selectors .mana-filter-selector {
   display: inline-block; }

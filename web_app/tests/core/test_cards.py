@@ -60,11 +60,10 @@ def test_card():
 
 
 @pytest.mark.django_db
-def test_search_cards(card_library):
+def test_search_cards(card_library, card_library_set_2):
     assert Card.objects.get(name='Braingeyser') == Card.objects.search(u='UU', q='brain')[0]
     assert Card.objects.search(g='GG').count() == 2
     assert Card.objects.search(b='GG').count() == 0, "b is black not green mana no results expected"
     assert Card.objects.search(g='gg').count() == Card.objects.search(g='GG').count()
     assert Card.objects.search(g='g').count() == Card.objects.search(g=1).count() == 7
-    # for c in Card.objects.search(b='GG'):
-    #     print ("{} -> {}".format(c.mana_cost, c.name))
+    assert Card.objects.search(s='Limited Edition Alpha 2').count() == 2, "set LEA_2 should have 2 cards, bout found {}.".format(Card.objects.search(s='LEA_2').count())

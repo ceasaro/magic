@@ -10,7 +10,7 @@ from magic.im_export import mtgjson
 
 @pytest.fixture()
 def card_library():
-    file_path = os.path.join(os.path.dirname(__file__), './data/mtgjson_sets_com.json')
+    file_path = os.path.join(os.path.dirname(__file__), './data/mtgjson_set_1_com.json')
     mtgjson.import_sets(json.load(open(file_path, 'r')))
     library = Deck()
     [library.add(card) for card in Card.objects.all()]
@@ -19,7 +19,16 @@ def card_library():
 
 @pytest.fixture()
 def card_library_2():
-    file_path = os.path.join(os.path.dirname(__file__), './data/mtgjson_sets_com.json')
+    file_path = os.path.join(os.path.dirname(__file__), './data/mtgjson_set_1_com.json')
+    mtgjson.import_sets(json.load(open(file_path, 'r')))
+    library = Deck()
+    [library.add(card) for card in Card.objects.all()]
+    return library
+
+
+@pytest.fixture()
+def card_library_set_2():
+    file_path = os.path.join(os.path.dirname(__file__), './data/mtgjson_set_2_com.json')
     mtgjson.import_sets(json.load(open(file_path, 'r')))
     library = Deck()
     [library.add(card) for card in Card.objects.all()]

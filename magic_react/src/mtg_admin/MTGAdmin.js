@@ -4,22 +4,31 @@ import '../css/layout/magic.css';
 import MagicAPI from './APIClient'
 import Card from './Cards';
 import Mana from './Mana';
-import SetsFilter from './Sets'
+import {Sets, SetsFilter} from './Sets'
 import _ from 'lodash'
 import update from 'immutability-helper';
 
 class MTGAdmin extends Component {
     constructor() {
         super();
+        this.empty_mana = {w: 0, u: 0, b: 0, r: 0, g: 0,};
         this.state = {
             all_cards: [],
             deck_cards: [],
             filter: {
                 sets: [],
                 q: '',
-                mana: {w: 0, u: 0, b: 0, r: 0, g: 0,}
+                mana: this.empty_mana
             }
         }
+    }
+
+    mana_count() {
+        let count = 0;
+        _.forOwn(this.state.filter.mana, function (mana_value, mana) {
+            count += mana_value
+        });
+        return count;
     }
 
     render() {
@@ -79,7 +88,11 @@ class MTGAdmin extends Component {
                                 <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
                             </div>
                         </div>
-                        <Mana mana={this.state.filter.mana}/>
+                    </div>
+                    <div className="col-3">
+                        <div className="sets-filter-wrapper">
+                            <SetsFilter onClick={this.selectMTGSet.bind(this)} selectedSets={this.state.filter.sets}/>
+                        </div>
                     </div>
                 </div>
                 <div className="row">
@@ -92,7 +105,19 @@ class MTGAdmin extends Component {
                         </div>
                     </div>
                     <div className="col-2">
-                        <SetsFilter onClick={this.selectMTGSet.bind(this)} selectedSets={this.state.filter.sets}/>
+                        <h4>Current filter</h4>
+                        <div>
+                            <b>Mana</b>
+                            {this.mana_count() > 0 ?
+                                <i className="delete" onClick={this.clearManaFilter.bind(this)}/> : ''}
+                            <Mana mana={this.state.filter.mana}/>
+                        </div>
+                        <div className="seletected-sets-wrapper">
+                            <b>Sets</b>
+                            {this.state.filter.sets.length > 0 ?
+                                <i className="delete" onClick={this.clearSetsFilter.bind(this)}/> : ''}
+                            <Sets sets={this.state.filter.sets}/>
+                        </div>
                     </div>
                 </div>
                 <div className="row footer">
@@ -139,6 +164,14 @@ class MTGAdmin extends Component {
         this.loadData(new_filter)
     }
 
+    clearManaFilter() {
+        this.setState({
+            filter: update(this.state.filter, {
+                mana: {$set: this.empty_mana},
+            })
+        })
+    }
+
     selectMTGSet(event) {
         const set = event.target.value;
         let new_filter;
@@ -150,6 +183,15 @@ class MTGAdmin extends Component {
         }
 
         this.setState({filter: new_filter});
+        this.loadData(new_filter);
+    }
+
+    clearSetsFilter() {
+        this.setState({
+            filter: update(this.state.filter, {
+                sets: {$set: []},
+            })
+        })
     }
 
     handleAllCardsClick(card) {
@@ -171,7 +213,7 @@ class MTGAdmin extends Component {
     }
 
     loadData(opts) {
-        let options = _.extend({next: false, previous: false, q: '', mana: {w: 0, u: 0, b: 0, r: 0, g: 0,}}, opts),
+        let options = _.extend({next: false, previous: false, q: '', mana: this.empty_mana, sets: []}, opts),
             url = '/api/cards/',
             query_string = '';
         if (options.next) {
@@ -187,6 +229,9 @@ class MTGAdmin extends Component {
             query_string += 'r=' + (options.mana.r ? options.mana.r : '') + '&';  // red mana
             query_string += 'g=' + (options.mana.g ? options.mana.g : '') + '&';  // green mana
             query_string += 'c=' + (options.mana.c ? options.mana.c : '') + '&';  // colorless mana
+            _.forEach(options.sets, function (set_name) {
+                query_string += 's=' + set_name + '&';
+            });
         }
         if (query_string) {
             url += '?' + query_string

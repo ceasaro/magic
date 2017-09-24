@@ -14,7 +14,7 @@ class SetsFilter extends Component {
 
     render() {
         const all_sets = this.state.sets.map((set, index) =>
-            <div key={set.name} className={'mtg-set ' + (this.props.selectedSets.includes(set.name)?'selected':'')}>
+            <div key={'set-filter-'+set.name} className={'mtg-set ' + (this.props.selectedSets.includes(set.name)?'selected':'')}>
                 <input type="checkbox" value={set.name} id={'set-' + index + '-' + set.name} onClick={this.props.onClick}/>
                 <label htmlFor={'set-' + index + '-' + set.name}>{set.name}</label>
             </div>
@@ -42,4 +42,13 @@ class SetsFilter extends Component {
     }
 }
 
-export default SetsFilter;
+function Sets(props) {
+    const all_sets = props.sets.map((set_name, index) =>
+        <div key={set_name} className='mtg-set'>{set_name}</div>
+    );
+    return (
+        <div className="mtg-sets">{all_sets}</div>
+    )
+}
+
+export {SetsFilter, Sets};
