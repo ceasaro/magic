@@ -1,15 +1,27 @@
+import logging
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 
+from magic.core.exception import MagicImportException
+
+log = logging.getLogger(__name__)
+
 
 def import_card_image(card_name):
     params = urlencode({'q': card_name})
-    magiccards_url = 'https://magiccards.info'
-    page = urlopen('{}/query?{}'.format(magiccards_url, params)).read().decode('utf-8')
-    soup = BeautifulSoup(page, "html.parser")
-    card_img = soup.find('img', {'alt': card_name})
-    if card_img:
-        img_url = card_img.get('src')
-        return magiccards_url+img_url
+    magiccards_domain = 'https://magiccards.info'
+    url = '{}/query?{}'.format(magiccards_domain, params)
+    try:
+        page = urlopen(url).read().decode('utf-8')
+        soup = BeautifulSoup(page, "html.parser")
+        card_img = soup.find('img', {'alt': card_name})
+        if card_img:
+            img_url = card_img.get('src')
+            return magiccards_domain+img_url
+        else:
+            raise MagicImportException("Could not download image from: {}. May be the card name doesn't match exactly".format(url))
+    except Exception as e:
+        log.exception(e)
+        raise MagicImportException("Could not download image from: {}. Cause: {} ".format(url, e))

@@ -9,7 +9,8 @@ EXCEPTIONAL_MANA = [
     'hw',  # Little Girl
 ]
 
-class Mana(object):
+
+class Mana(str):
     ANY = ''
     WHITE = 'W'
     BLUE = 'U'

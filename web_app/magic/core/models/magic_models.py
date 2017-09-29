@@ -8,7 +8,6 @@ from urllib.request import urlretrieve
 import errno
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.files import File
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -36,8 +35,9 @@ class Set(models.Model):
 
 def card_image_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    path_name, img_ext = os.path.splitext(filename)
-    return 'CARD_IMAGES/{0}/{1}{2}'.format(slugify(instance.set.name), slugify(instance.name), img_ext)
+    if filename:
+        path_name, img_ext = os.path.splitext(filename)
+        return 'CARD_IMAGES/{0}/{1}{2}'.format(slugify(instance.set.name), slugify(instance.name), img_ext)
 
 
 class CardQuerySet(models.QuerySet):
@@ -82,7 +82,7 @@ class Card(models.Model, CardTypes):
     external_id = models.CharField(primary_key=True, max_length=50, editable=False)
     set = models.ForeignKey(Set, blank=False, null=True, related_name='cards')
     _types = models.CharField(max_length=1024)
-    _subtypes = models.CharField(max_length=1024)
+    _subtypes = models.CharField(max_length=1024, null=True)
     type_line = models.CharField(max_length=256, null=True, blank=True)
     text = models.CharField(max_length=1024, null=True, blank=True)
     collector_number = models.CharField(max_length=64, null=True, blank=True)
@@ -94,20 +94,21 @@ class Card(models.Model, CardTypes):
 
     objects = CardQuerySet.as_manager()
 
-    def download_image(self, refresh=False):
-        if not self.image or refresh:
-            img_url = import_card_image(self.name)
-            img_model_name = card_image_path(self, img_url)
-            img_file_name = os.path.join(settings.MEDIA_ROOT, img_model_name)
-            if not os.path.exists(os.path.dirname(img_file_name)):
-                try:
-                    os.makedirs(os.path.dirname(img_file_name))
-                except OSError as exc:  # Guard against race condition
-                    if exc.errno != errno.EEXIST:
-                        raise
-            urlretrieve(img_url, img_file_name)
-            self.image = img_model_name
-            self.save()
+    def download_image(self, refresh=False, url=None):
+        if not self.image or refresh or url:
+            img_url = url or import_card_image(self.name)
+            if img_url:
+                img_model_name = card_image_path(self, img_url)
+                img_file_name = os.path.join(settings.MEDIA_ROOT, img_model_name)
+                if not os.path.exists(os.path.dirname(img_file_name)):
+                    try:
+                        os.makedirs(os.path.dirname(img_file_name))
+                    except OSError as exc:  # Guard against race condition
+                        if exc.errno != errno.EEXIST:
+                            raise
+                urlretrieve(img_url, img_file_name)
+                self.image = img_model_name
+                self.save()
         return self.image
 
     @property

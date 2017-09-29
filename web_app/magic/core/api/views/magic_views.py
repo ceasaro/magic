@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from rest_framework.decorators import detail_route
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from magic.core.api.serializers import CardSerializer, SetSerializer
 from magic.core.models import Card, Set
@@ -13,7 +13,6 @@ class SetViewSet(ModelViewSet):
     queryset = Set.objects.all()
     serializer_class = SetSerializer
     pagination_class = None
-
 
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -69,3 +68,13 @@ class CardViewSet(ModelViewSet):
         card.download_image()
         serializer = self.serializer_class(card)
         return Response(serializer.data)
+
+
+class CardTypeViewSet(ViewSet):
+    permission_classes = []
+
+    def list(self, request):
+        return Response(Card.ALL_TYPES)
+
+    def get(self, request, *args, **kwargs):
+        return Response(Card.ALL_TYPES)

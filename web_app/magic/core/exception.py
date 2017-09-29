@@ -12,3 +12,6 @@ class NoManaException(Exception):
 
 class ManaValidationError(MagicException, ValidationError):
     pass
+
+class MagicImportException(Exception):
+    pass
