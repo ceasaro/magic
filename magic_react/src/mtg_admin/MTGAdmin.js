@@ -57,7 +57,7 @@ class MTGAdmin extends Component {
                     </div>
                 </div>
                 <div className="row filtering">
-                    <div className="col-3">
+                    <div className="col-4">
                         <div className="form-group">
                             <label className="filter-label" htmlFor="search_card">Search cards:</label>
                             <input type="text" className="form-control" id="search_card"
@@ -65,6 +65,16 @@ class MTGAdmin extends Component {
                         </div>
                     </div>
                     <div className="col-3">
+                        <div className="type-filter-wrapper">
+                            <div>type</div>
+                        </div>
+                    </div>
+                    <div className="col-3">
+                        <div className="sets-filter-wrapper">
+                            <SetsFilter onClick={this.selectMTGSet.bind(this)} selectedSets={this.state.filter.sets}/>
+                        </div>
+                    </div>
+                    <div className="col-2">
                         <label className="filter-label">Mana</label>
                         <div className="mana-filter-selectors">
                             <div className="mana-filter-selector" data-mana="w">
@@ -154,6 +164,9 @@ class MTGAdmin extends Component {
             mana_count = this.state.filter.mana[mana] + plus_min;
         if (mana_count < 0) {
             mana_count = 0;
+        }
+        if (mana_count >= 20) {
+            mana_count = 19;
         }
         const new_filter = update(this.state.filter, {
             mana: {

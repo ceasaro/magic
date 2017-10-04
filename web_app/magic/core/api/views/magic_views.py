@@ -39,7 +39,6 @@ class CardViewSet(ModelViewSet):
             queryset = queryset.filter(set__name=set_name)
         queryset = queryset.search(
             q=self.request.query_params.get('q'),  # search query
-            a=self.request.query_params.get('a'),  # any mana
             w=self.request.query_params.get('w'),  # white mana
             u=self.request.query_params.get('u'),  # blue mana
             b=self.request.query_params.get('b'),  # black mana

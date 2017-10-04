@@ -4,22 +4,25 @@ from django.utils.translation import ugettext_lazy as _
 
 from magic.core.exception import ManaValidationError, NoManaException
 
+
 EXCEPTIONAL_MANA = [
     'XYZRR',  # The Ultimate Nightmare of Wizards of the Coast® Customer Service
     'hw',  # Little Girl
 ]
 
 
-class Mana(str):
-    ANY = ''
+class Mana():
+    ANY = 'A'
     WHITE = 'W'
     BLUE = 'U'
     BLACK = 'B'
     RED = 'R'
     GREEN = 'G'
     COLOURLESS = 'C'
+    NOT_IMPLEMENTED = 'N'  # until now 'N' isn't a valid part of the mana string we use it for NOT IMPLEMENTED
 
     def __init__(self, *args, any=0, white=0, blue=0, black=0, red=0, green=0, colourless=0):
+        super().__init__()
         self.any = any
         self.white = white
         self.blue = blue
@@ -28,16 +31,29 @@ class Mana(str):
         self.green = green
         self.colourless = colourless
         self.X = ''
+        self.not_implemented = ''
         str_repr = args[0] if args else None
         if str_repr:
             self.from_str(str_repr)
+
+    def reset(self):
+        self.any = 0
+        self.white = 0
+        self.blue = 0
+        self.black = 0
+        self.red = 0
+        self.green = 0
+        self.colourless = 0
+        self.X = ''
+        self.not_implemented = ''
+
 
     def from_str(self, str_repr):
         # todo: allow mana of the form '{B/R}' (black or red)
         # todo: allow mana of the form 'C'
         any = ''
         if str_repr in EXCEPTIONAL_MANA:
-            self.any = 2**31  # not implement make cost to high to pay.
+            self.not_implemented = self.NOT_IMPLEMENTED  # not implement make cost to high to pay.
             return
         for i, char in enumerate(str_repr):
             if char in '0123456789' and len(any) == (i - len(self.X)):
@@ -56,10 +72,11 @@ class Mana(str):
                 self.colourless += 1
             elif char == 'X':
                 self.X += 'X'
-            elif char == '/':
+            elif char == '/' or char == self.NOT_IMPLEMENTED:
                 # todo: allow mana of the form '{B/R}' (black or red)
-                any = str(2**31)  # not implement make cost to high to pay.
-                break
+                self.reset()
+                self.not_implemented = self.NOT_IMPLEMENTED  # not implement make mana invalid
+                return
             else:
                 raise ManaValidationError(_("Illegal string representation for mana: {}".format(str_repr)))
         if any:
@@ -69,6 +86,8 @@ class Mana(str):
         return self.__str__()
 
     def __str__(self, *args, **kwargs):
+        if self.not_implemented:
+            return self.not_implemented
         return "{}{}{}{}{}{}{}{}".format(
             self.X,
             self.any if self.any else '0' if self.white + self.blue + self.black + self.red + self.green == 0 and not self.X else '',

@@ -20,10 +20,10 @@ from magic.core.models.fields import Mana
     ("XWWUUR", "XWWUUR", (0, 'X', 2, 2, 0, 1, 0, 0)),
     ("XX2WW", "XX2WW", (2, 'XX', 2, 0, 0, 0, 0, 0)),
     ("6C", "6C", (6, '', 0, 0, 0, 0, 0, 1)),  # can pay 2 any or 1 plain (3 times)
-    ("2/W2/W2/W", "2147483648", (2 ** 31, '', 0, 0, 0, 0, 0, 0)),  # can pay 2 any or 1 plain (3 times)
+    ("2/W2/W2/W", "N", (0, '', 0, 0, 0, 0, 0, 0)),  # can pay 2 any or 1 plain (3 times)
     (None, "0", (0, '', 0, 0, 0, 0, 0, 0)),
     ("1W3G", "exception", "exception"),
-    ("XYZRR", "2147483648", (2**31, '', 0,0,0,0,0,0)) # Exception mana skip for now
+    ("XYZRR", "N", (0, '', 0,0,0,0,0,0)) # Exception mana skip for now
 ])
 def test_mana(mana_str, expected_mana_str, expected):
     if expected == 'exception':
@@ -65,5 +65,5 @@ def test_search_cards(card_library, card_library_set_2):
     assert Card.objects.search(g='GG').count() == 2
     assert Card.objects.search(b='GG').count() == 0, "b is black not green mana no results expected"
     assert Card.objects.search(g='gg').count() == Card.objects.search(g='GG').count()
-    assert Card.objects.search(g='g').count() == Card.objects.search(g=1).count() == 7
+    # assert Card.objects.search(a=2).count() == 15, 'expected 15 card with 2 or more any mana'
     assert Card.objects.search(s='Limited Edition Alpha 2').count() == 2, "set LEA_2 should have 2 cards, bout found {}.".format(Card.objects.search(s='LEA_2').count())

@@ -2,7 +2,7 @@ import React from 'react';
 
 function ManaOne(props) {
     const mana_attr = {
-        className: 'mana ' + props.mana
+        className: 'mana ' + (parseInt(props.mana)? 'a'+props.mana : props.mana)
     };
 
     return <i {...mana_attr}/>
@@ -11,6 +11,7 @@ function ManaOne(props) {
 function Mana(props) {
     let mana_filter = [];
     if (props.mana) {
+        mana_filter.push(<ManaOne key={"a_" + props.mana.a} mana={props.mana.a}/>);
         for (let i = 0; i < props.mana.w; i++) {
             mana_filter.push(<ManaOne key={"w_" + i} mana={'w'}/>)
         }

@@ -1,6 +1,6 @@
 import pytest
 
-from magic.core.exception import MagicGameException
+from magic.core.exception import MagicGameException, NoManaException
 
 
 @pytest.mark.django_db
@@ -25,12 +25,13 @@ def test_play_land_card(player):
 @pytest.mark.django_db
 def test_play_creature_card(player):
     birds_of_paradise = player.hand.get_by_name("Birds of Paradise")
-    with pytest.raises(MagicGameException):
+    with pytest.raises(NoManaException):
         player.play(birds_of_paradise)
 
     forest = player.hand.get_by_name("Forest")
     player.play(forest)
-    with pytest.raises(MagicGameException):
+    with pytest.raises(NoManaException):
+        # land card played but not tapped for mane
         player.play(birds_of_paradise)
 
     player.tap(forest)

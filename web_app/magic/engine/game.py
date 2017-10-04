@@ -1,5 +1,7 @@
 from random import shuffle
 
+from django.template.backends.django import reraise
+
 from magic.core.exception import MagicGameException, NoManaException
 from magic.core.models import Card
 from magic.core.models.fields import ManaPool
