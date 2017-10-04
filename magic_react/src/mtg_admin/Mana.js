@@ -2,7 +2,7 @@ import React from 'react';
 
 function ManaOne(props) {
     const mana_attr = {
-        className: 'mana ' + (parseInt(props.mana)? 'a'+props.mana : props.mana)
+        className: 'mana ' + (parseInt(props.mana, 10)? 'a'+props.mana : props.mana)
     };
 
     return <i {...mana_attr}/>

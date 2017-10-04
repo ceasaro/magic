@@ -28,10 +28,12 @@ def create_or_update_card(card, set):
                                                       defaults={
                                                           '_types': ','.join(card.get('types', [])),
                                                           '_subtypes': ','.join(card.get('subtypes', [])),
+                                                          '_supertypes': ','.join(card.get('supertypes', [])),
                                                           'type_line': card.get('type', None),
                                                           'text': card.get('text', None),
                                                           'mana_cost': card.get('manaCost', '').translate(
                                                               {ord(c): None for c in '{}'}),
+                                                          'cmc': card.get('cmc', 0),
                                                           '_power': card.get('power', 0),
                                                           '_toughness': card.get('toughness', 0),
                                                       })

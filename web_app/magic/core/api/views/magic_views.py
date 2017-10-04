@@ -45,6 +45,7 @@ class CardViewSet(ModelViewSet):
             r=self.request.query_params.get('r'),  # read mana
             g=self.request.query_params.get('g'),  # green mana
             c=self.request.query_params.get('c'),  # colorless mana
+            card_types=self.request.query_params.get('ct')
         )
 
         return queryset

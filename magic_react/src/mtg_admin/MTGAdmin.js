@@ -5,6 +5,7 @@ import MagicAPI from './APIClient'
 import Card from './Cards';
 import Mana from './Mana';
 import {Sets, SetsFilter} from './Sets'
+import {CardTypes, CardTypesFilter} from './CardTypes'
 import _ from 'lodash'
 import update from 'immutability-helper';
 
@@ -17,6 +18,7 @@ class MTGAdmin extends Component {
             deck_cards: [],
             filter: {
                 sets: [],
+                card_types: [],
                 q: '',
                 mana: this.empty_mana
             }
@@ -65,8 +67,8 @@ class MTGAdmin extends Component {
                         </div>
                     </div>
                     <div className="col-3">
-                        <div className="type-filter-wrapper">
-                            <div>type</div>
+                        <div className="card-types-filter-wrapper">
+                            <CardTypesFilter onClick={this.selectMTGCardType.bind(this)} selectedTypes={this.state.filter.card_types}/>
                         </div>
                     </div>
                     <div className="col-3">
@@ -99,11 +101,6 @@ class MTGAdmin extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-3">
-                        <div className="sets-filter-wrapper">
-                            <SetsFilter onClick={this.selectMTGSet.bind(this)} selectedSets={this.state.filter.sets}/>
-                        </div>
-                    </div>
                 </div>
                 <div className="row">
                     <div className="col">
@@ -127,6 +124,12 @@ class MTGAdmin extends Component {
                             {this.state.filter.sets.length > 0 ?
                                 <i className="delete" onClick={this.clearSetsFilter.bind(this)}/> : ''}
                             <Sets sets={this.state.filter.sets}/>
+                        </div>
+                        <div className="seletected-sets-wrapper">
+                            <b>CardTypes</b>
+                            {this.state.filter.sets.length > 0 ?
+                                <i className="delete" onClick={this.clearCardTypesFilter.bind(this)}/> : ''}
+                            <CardTypes card_types={this.state.filter.card_types}/>
                         </div>
                     </div>
                 </div>
@@ -197,12 +200,34 @@ class MTGAdmin extends Component {
 
         this.setState({filter: new_filter});
         this.loadData(new_filter);
-    }
+   }
 
     clearSetsFilter() {
         this.setState({
             filter: update(this.state.filter, {
                 sets: {$set: []},
+            })
+        })
+    }
+
+    selectMTGCardType(event) {
+        const card_type = event.target.value;
+        let new_filter;
+        if (event.target.checked) {
+            new_filter = update(this.state.filter, {card_types: {$push: [card_type]}});
+        } else {
+            const index = this.state.filter.card_types.indexOf(card_type);
+            new_filter = update(this.state.filter, {card_types: {$splice: [[index, 1]]}});
+        }
+
+        this.setState({filter: new_filter});
+        this.loadData(new_filter);
+    }
+
+    clearCardTypesFilter() {
+        this.setState({
+            filter: update(this.state.filter, {
+                card_types: {$set: []},
             })
         })
     }
@@ -244,6 +269,9 @@ class MTGAdmin extends Component {
             query_string += 'c=' + (options.mana.c ? options.mana.c : '') + '&';  // colorless mana
             _.forEach(options.sets, function (set_name) {
                 query_string += 's=' + set_name + '&';
+            });
+            _.forEach(options.card_types, function (card_type) {
+                query_string += 'ct=' + card_type + '&';
             });
         }
         if (query_string) {

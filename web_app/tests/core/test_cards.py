@@ -65,5 +65,14 @@ def test_search_cards(card_library, card_library_set_2):
     assert Card.objects.search(g='GG').count() == 2
     assert Card.objects.search(b='GG').count() == 0, "b is black not green mana no results expected"
     assert Card.objects.search(g='gg').count() == Card.objects.search(g='GG').count()
-    # assert Card.objects.search(a=2).count() == 15, 'expected 15 card with 2 or more any mana'
-    assert Card.objects.search(s='Limited Edition Alpha 2').count() == 2, "set LEA_2 should have 2 cards, bout found {}.".format(Card.objects.search(s='LEA_2').count())
+    assert Card.objects.search(
+        sets='Limited Edition Alpha 2').count() == 2, "set LEA_2 should have 2 cards, bout found {}.".format(Card.objects.search(
+        sets='LEA_2').count())
+
+@pytest.mark.django_db
+def test_search_cards_by_type(card_library):
+    assert Card.objects.search(card_types='Land').count() == 4
+    assert Card.objects.search(card_types=['Forest',]).count() == 2
+    assert Card.objects.search(card_types=['Land','Forest']).count() == 2
+    assert Card.objects.search(card_types=['Basic','Forest']).count() == 1
+    assert Card.objects.search(card_types=['Atog','Legendary', 'Creature']).count() == 1

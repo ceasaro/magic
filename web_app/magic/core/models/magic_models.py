@@ -1,3 +1,4 @@
+import operator
 import re
 
 from decimal import Decimal
@@ -6,14 +7,16 @@ import os
 from urllib.request import urlretrieve
 
 import errno
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q
 from django.template.defaultfilters import slugify
+from functools import reduce
 
-from magic.core.models import land_types
 from magic.core.models.fields import ManaField, Mana
-from magic.core.models.types import CardTypes
+from magic.core.models.types import CardTypes, LandTypes
 from magic.im_export.magiccards import import_card_image
 
 CARD_IMAGES_ROOT = os.path.join(settings.MEDIA_ROOT, 'CARD_IMAGES')
@@ -45,9 +48,8 @@ class CardQuerySet(models.QuerySet):
     def valid_mana(self):
         return self.exclude(mana_cost__contains=Mana.NOT_IMPLEMENTED)
 
-    def search(self, q=None, w=None, u=None, b=None, r=None, g=None, c=None, s=None):
+    def search(self, q=None, w=None, u=None, b=None, r=None, g=None, c=None, sets=None, card_types=None):
         query_set = self.valid_mana()
-
         def filter_mana(mana, mana_value):
 
             if mana_value:
@@ -72,9 +74,14 @@ class CardQuerySet(models.QuerySet):
         query_set = filter_mana(Mana.RED, r)
         query_set = filter_mana(Mana.GREEN, g)
         query_set = filter_mana(Mana.COLOURLESS, c)
-        if s:
-            s = [s] if isinstance(s, str) else s
-            query_set = query_set.filter(set__name__in=s)
+        if sets:
+            sets = [sets] if isinstance(sets, str) else sets
+            query_set = query_set.filter(set__name__in=sets)
+
+        if card_types:
+            card_types = [card_types] if isinstance(card_types, str) else card_types
+            query_set = query_set.filter(
+                reduce(operator.and_, (Q(_types__contains=ct) | Q(_subtypes__contains=ct) | Q(_supertypes__contains=ct) for ct in card_types)))
         return query_set
 
 
@@ -85,10 +92,12 @@ class Card(models.Model, CardTypes):
     set = models.ForeignKey(Set, blank=False, null=True, related_name='cards')
     _types = models.CharField(max_length=1024)
     _subtypes = models.CharField(max_length=1024, null=True)
+    _supertypes = models.CharField(max_length=1024, null=True)
     type_line = models.CharField(max_length=256, null=True, blank=True)
     text = models.CharField(max_length=1024, null=True, blank=True)
     collector_number = models.CharField(max_length=64, null=True, blank=True)
     mana_cost = ManaField(default='', null=True, blank=True)
+    cmc = models.IntegerField(default=0)
     _power = models.CharField(max_length=4)
     _toughness = models.CharField(max_length=4)
 
@@ -159,15 +168,15 @@ class Card(models.Model, CardTypes):
         # card has no ability to add mana check if it's a land card
         card_types = self.subtypes
         if total_mana == 0:
-            if land_types.PLAINS in card_types:
+            if LandTypes.PLAINS in card_types:
                 white_mana += 1
-            elif land_types.ISLAND in card_types:
+            elif LandTypes.ISLAND in card_types:
                 blue_mana += 1
-            elif land_types.SWAMP in card_types:
+            elif LandTypes.SWAMP in card_types:
                 black_mana += 1
-            elif land_types.MOUNTAIN in card_types:
+            elif LandTypes.MOUNTAIN in card_types:
                 red_mana += 1
-            elif land_types.FOREST in card_types:
+            elif LandTypes.FOREST in card_types:
                 green_mana += 1
 
         return Mana(any=any_mana,

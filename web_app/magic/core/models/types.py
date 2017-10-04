@@ -1,4 +1,22 @@
-from . import land_types, creature_types
+from . import creature_types
+
+
+class LandTypes(object):
+    PLAINS = 'Plains'
+    ISLAND = 'Island'
+    SWAMP = 'Swamp'
+    MOUNTAIN = 'Mountain'
+    FOREST = 'Forest'
+    DESERT = 'Desert'
+    GATE = 'Gate'
+    LAIR = 'Lair'
+    LOCUS = 'Locus'
+    MINE = 'Mine'
+    POWER_PLANT = 'Power-Plant'
+    TOWER = 'Tower'
+    URZA_S = "Urza's"
+
+    ALL = [PLAINS, ISLAND, SWAMP, MOUNTAIN, FOREST, DESERT, GATE, LAIR, LOCUS, MINE, POWER_PLANT, TOWER, URZA_S]
 
 
 class CardTypes(object):
@@ -25,7 +43,7 @@ class CardTypes(object):
     ENCHANTMENT = [AURA, CURSE, SHRINE]
 
     LAND = 'Land'
-    LANDS = [land_type for land_type in dir(land_types) if not land_type.startswith('__')]
+    LANDS = LandTypes.ALL
 
     PLANESWALKER = 'Planeswalker'  # subtypes
     # import pdb; pdb.set_trace()
