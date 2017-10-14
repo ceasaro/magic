@@ -21,7 +21,8 @@ class MTGAdmin extends Component {
                 card_types: [],
                 q: '',
                 mana: this.empty_mana
-            }
+            },
+            show_filter: true,
         }
     }
 
@@ -53,55 +54,62 @@ class MTGAdmin extends Component {
             </div>
         );
         return (
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col"><h2>Create a deck</h2>
-                    </div>
-                </div>
-                <div className="row filtering">
-                    <div className="col-4">
-                        <div className="form-group">
-                            <label className="filter-label" htmlFor="search_card">Search cards:</label>
-                            <input type="text" className="form-control" id="search_card"
-                                   onChange={this.handleSearchChange.bind(this)}/>
-                        </div>
-                    </div>
-                    <div className="col-3">
-                        <div className="card-types-filter-wrapper">
-                            <CardTypesFilter onClick={this.selectMTGCardType.bind(this)} selectedTypes={this.state.filter.card_types}/>
-                        </div>
-                    </div>
-                    <div className="col-3">
-                        <div className="sets-filter-wrapper">
-                            <SetsFilter onClick={this.selectMTGSet.bind(this)} selectedSets={this.state.filter.sets}/>
-                        </div>
-                    </div>
-                    <div className="col-2">
-                        <label className="filter-label">Mana</label>
-                        <div className="mana-filter-selectors">
-                            <div className="mana-filter-selector" data-mana="w">
-                                <i className="mana-big w" onClick={this.handleManaFilter.bind(this)}/>
-                                <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
-                            </div>
-                            <div className="mana-filter-selector" data-mana="u">
-                                <i className="mana-big blue" onClick={this.handleManaFilter.bind(this)}/>
-                                <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
-                            </div>
-                            <div className="mana-filter-selector" data-mana="b">
-                                <i className="mana-big black" onClick={this.handleManaFilter.bind(this)}/>
-                                <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
-                            </div>
-                            <div className="mana-filter-selector" data-mana="r">
-                                <i className="mana-big red" onClick={this.handleManaFilter.bind(this)}/>
-                                <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
-                            </div>
-                            <div className="mana-filter-selector" data-mana="g">
-                                <i className="mana-big green" onClick={this.handleManaFilter.bind(this)}/>
-                                <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
+            <div className="container-fluid hidden">
+                <div className="row filter-wrapper">
+                    <div className="col">
+                        <div className="row">
+                            <div className="col"><h2>Filter cards</h2>
                             </div>
                         </div>
+                        <div className="row filtering">
+                            <div className="col-4">
+                                <div className="form-group">
+                                    <label className="filter-label" htmlFor="search_card">Search cards:</label>
+                                    <input type="text" className="form-control" id="search_card"
+                                           onChange={this.handleSearchChange.bind(this)}/>
+                                </div>
+                            </div>
+                            <div className="col-3">
+                                <div className="card-types-filter-wrapper">
+                                    <CardTypesFilter onClick={this.selectMTGCardType.bind(this)} selectedTypes={this.state.filter.card_types}/>
+                                </div>
+                            </div>
+                            <div className="col-3">
+                                <div className="sets-filter-wrapper">
+                                    <SetsFilter onClick={this.selectMTGSet.bind(this)} selectedSets={this.state.filter.sets}/>
+                                </div>
+                            </div>
+                            <div className="col-2">
+                                <label className="filter-label">Mana</label>
+                                <div className="mana-filter-selectors">
+                                    <div className="mana-filter-selector" data-mana="w">
+                                        <i className="mana-big w" onClick={this.handleManaFilter.bind(this)}/>
+                                        <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
+                                    </div>
+                                    <div className="mana-filter-selector" data-mana="u">
+                                        <i className="mana-big blue" onClick={this.handleManaFilter.bind(this)}/>
+                                        <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
+                                    </div>
+                                    <div className="mana-filter-selector" data-mana="b">
+                                        <i className="mana-big black" onClick={this.handleManaFilter.bind(this)}/>
+                                        <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
+                                    </div>
+                                    <div className="mana-filter-selector" data-mana="r">
+                                        <i className="mana-big red" onClick={this.handleManaFilter.bind(this)}/>
+                                        <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
+                                    </div>
+                                    <div className="mana-filter-selector" data-mana="g">
+                                        <i className="mana-big green" onClick={this.handleManaFilter.bind(this)}/>
+                                        <i className="mtg-minus" onClick={this.handleManaFilter.bind(this)}/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> {/*row filtering */}
+
+
                     </div>
-                </div>
+                </div> {/* row filter-wrapper */}
+
                 <div className="row">
                     <div className="col">
                         <div className="row all-cards">
