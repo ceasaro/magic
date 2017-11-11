@@ -5,8 +5,8 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
 
-from magic.core.api.serializers import CardSerializer, SetSerializer
-from magic.core.models import Card, Set
+from magic.core.api.serializers import CardSerializer, SetSerializer, DeckSerializer
+from magic.core.models import Card, Set, Deck
 
 
 class SetViewSet(ModelViewSet):
@@ -68,6 +68,17 @@ class CardViewSet(ModelViewSet):
         card.download_image()
         serializer = self.serializer_class(card)
         return Response(serializer.data)
+
+
+class DeckViewSet(ModelViewSet):
+    serializer_class = DeckSerializer
+    lookup_field = 'name'
+
+    def get_queryset(self):
+        return Deck.objects.all()
+
+    def create(self, request, name, *args, **kwargs):
+        import pdb; pdb.set_trace()
 
 
 class CardTypeViewSet(ViewSet):

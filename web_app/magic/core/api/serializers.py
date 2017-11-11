@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from magic.core.models import Card, Set
+from magic.core.models import Card, Set, Deck
 
 
 class MagicModelSerializer(serializers.ModelSerializer):
@@ -23,3 +23,10 @@ class CardSerializer(MagicModelSerializer):
 
     def get_image_url(self, card):
         return card.image.url if card.image else ''
+
+
+class DeckSerializer(MagicModelSerializer):
+
+    class Meta:
+        model = Deck
+        fields = ('name', 'cards')

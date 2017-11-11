@@ -6,15 +6,15 @@ let MagicAPI = {
         return this._fetch(path, get_options)
     },
     post: function (path, post_options) {
-        _.extend({method: 'post'}, post_options);
+        _.assignIn(post_options, {method: 'post'});
         return this._fetch(path, post_options)
     },
     put: function (path, put_options) {
-        _.extend({method: 'put'}, put_options);
+        _.assignIn(put_options, {method: 'put'});
         return this._fetch(path, put_options)
     },
     remove: function (path, delete_options) {
-        _.extend({method: 'delete'}, delete_options);
+        _.assignIn(delete_options, {method: 'delete'});
         return this._fetch(path, delete_options)
     },
     card_img_url: function (card) {

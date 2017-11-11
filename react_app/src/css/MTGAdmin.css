@@ -90,6 +90,10 @@
   #mtg_admin .card-img-wrapper img {
     display: block;
     margin: auto; }
+#mtg_admin .new-deck-container {
+  background-color: rgba(0, 255, 0, 0.17);
+  padding: 20px 0;
+  width: 100%; }
 #mtg_admin .footer {
   margin-top: 50px;
   height: 220px; }

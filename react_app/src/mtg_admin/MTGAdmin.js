@@ -15,6 +15,7 @@ class MTGAdmin extends Component {
         this.empty_mana = {w: 0, u: 0, b: 0, r: 0, g: 0,};
         this.state = {
             all_cards: [],
+            deck_name: 'My new deck',
             deck_cards: [],
             filter: {
                 sets: [],
@@ -49,7 +50,7 @@ class MTGAdmin extends Component {
             </div>
         );
         const deck_cards = this.state.deck_cards.map((deck_card, index) =>
-            <div key={deck_card.external_id + '_' + index} className="col">{deck_card.name}
+            <div key={deck_card.external_id + '_' + index} className="col">
                 <Card card={deck_card} height={120} onClick={() => this.handleDeckCardsClick(deck_card)}/>
             </div>
         );
@@ -115,9 +116,6 @@ class MTGAdmin extends Component {
                         <div className="row all-cards">
                             {all_cards}
                         </div>
-                        <div className="row deck-cards">
-                            {deck_cards}
-                        </div>
                     </div>
                     <div className="col-2">
                         <h4>Current filter</h4>
@@ -141,7 +139,7 @@ class MTGAdmin extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="row footer">
+                <div className="row">
                     <div className="col">
                         <button className="btn btn-primary" type="submit" {...previous_button_attrs}
                                 onClick={() => this.loadData({'previous': true})}>
@@ -154,6 +152,27 @@ class MTGAdmin extends Component {
                             Next
                         </button>
                     </div>
+
+                </div>
+                <div className="row">
+                    <div className="new-deck-container">
+                        <div className="col">
+                            <div className="row deck-name">
+                                <input type="text" value={this.state.deck_name} onChange={this.setDeckName.bind(this)}/>
+                                <span>{this.state.deck_name}</span>
+                            </div>
+                            <div className="row deck-cards">
+                                {deck_cards}
+                            </div>
+                            <div className="row">
+                                <button className="btn btn-primary" type="submit" onClick={this.saveDeck.bind(this)}>Save deck</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row footer">
+                    <span>Cees van Wieringen, 2017</span>
                 </div>
             </div> // container-fluid
         );
@@ -254,6 +273,18 @@ class MTGAdmin extends Component {
         this.setState({deck_cards: deck_cards})
     }
 
+    setDeckName(event) {
+        this.setState({deck_name: event.target.value})
+    }
+    saveDeck() {
+        MagicAPI.put('/api/decks/'+this.state.deck_name + '/',
+            {
+                body:{
+                    cards:_.map(this.state.deck_cards, 'external_id')
+                }
+            }).then(data => {
+        })
+    }
     componentDidMount() {
         this.loadData();
     }
