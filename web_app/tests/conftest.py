@@ -4,7 +4,7 @@ import os
 import pytest
 
 from magic.core.models import Card
-from magic.engine.game import Player, Game, Deck, Cards
+from magic.engine.game import Player, Game, Library, Cards
 from magic.im_export import mtgjson
 
 
@@ -12,7 +12,7 @@ from magic.im_export import mtgjson
 def card_library():
     file_path = os.path.join(os.path.dirname(__file__), './data/mtgjson_set_1_com.json')
     mtgjson.import_sets(json.load(open(file_path, 'r')))
-    library = Deck()
+    library = Library()
     [library.add(card) for card in Card.objects.all()]
     return library
 
@@ -21,7 +21,7 @@ def card_library():
 def card_library_2():
     file_path = os.path.join(os.path.dirname(__file__), './data/mtgjson_set_1_com.json')
     mtgjson.import_sets(json.load(open(file_path, 'r')))
-    library = Deck()
+    library = Library()
     [library.add(card) for card in Card.objects.all()]
     return library
 
@@ -30,7 +30,7 @@ def card_library_2():
 def card_library_set_2():
     file_path = os.path.join(os.path.dirname(__file__), './data/mtgjson_set_2_com.json')
     mtgjson.import_sets(json.load(open(file_path, 'r')))
-    library = Deck()
+    library = Library()
     [library.add(card) for card in Card.objects.all()]
     return library
 

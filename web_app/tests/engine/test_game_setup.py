@@ -1,7 +1,5 @@
 import pytest
 
-from magic.core.exception import MagicGameException
-
 
 @pytest.mark.django_db
 def test_game_setup_2_players(game):

@@ -69,6 +69,7 @@ def test_search_cards(card_library, card_library_set_2):
         sets='Limited Edition Alpha 2').count() == 2, "set LEA_2 should have 2 cards, bout found {}.".format(Card.objects.search(
         sets='LEA_2').count())
 
+
 @pytest.mark.django_db
 def test_search_cards_by_type(card_library):
     assert Card.objects.search(card_types='Land').count() == 4

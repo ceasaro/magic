@@ -80,7 +80,7 @@ class Cards():
         return card_state in self.cards
 
 
-class Deck(Cards):
+class Library(Cards):
     def shuffle(self):
         shuffle(self.cards)
 
@@ -98,13 +98,13 @@ class Player():
         super().__init__()
         self.name = name
         self.live = 20
-        self.library = library if library else Deck()
+        self.library = library if library else Library()
         self.hand = Cards()
         for i in range(7):
             self.hand.add(library.draw())
         self.played_cards = Cards()
-        self.graveyard = Deck()
-        self.exiled = Deck()
+        self.graveyard = Library()
+        self.exiled = Library()
         self.mana_pool = ManaPool()
 
         self.attacking_cards = Cards()

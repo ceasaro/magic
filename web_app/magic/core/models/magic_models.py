@@ -9,9 +9,11 @@ from urllib.request import urlretrieve
 import errno
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db import models
 from django.db.models import Q
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 from functools import reduce
 
@@ -231,3 +233,11 @@ class Deck(models.Model):
     cards = models.ManyToManyField(Card, related_name='deck')
 
 
+#
+#   Model signals
+#
+@receiver(post_save, sender=Player, dispatch_uid="add_player_to_group")
+def add_player_to_group(sender, instance, **kwargs):
+    user = instance.user
+    user.groups.add(Group.objects.get(name='player'))
+    user.save()

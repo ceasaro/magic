@@ -77,8 +77,8 @@ class DeckViewSet(ModelViewSet):
     def get_queryset(self):
         return Deck.objects.all()
 
-    def create(self, request, name, *args, **kwargs):
-        import pdb; pdb.set_trace()
+    def get_object(self):
+        return super().get_object()
 
 
 class CardTypeViewSet(ViewSet):
