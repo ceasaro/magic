@@ -14,6 +14,7 @@ class MTGAdmin extends Component {
         super();
         this.empty_mana = {w: 0, u: 0, b: 0, r: 0, g: 0,};
         this.state = {
+            card_count: 0,
             all_cards: [],
             deck_name: 'My new deck',
             deck_cards: [],
@@ -59,7 +60,7 @@ class MTGAdmin extends Component {
                 <div className="row filter-wrapper">
                     <div className="col">
                         <div className="row">
-                            <div className="col"><h2>Filter cards</h2>
+                            <div className="col"><h2>Filter cards <span>({this.state.card_count})</span></h2>
                             </div>
                         </div>
                         <div className="row filtering">
@@ -277,7 +278,7 @@ class MTGAdmin extends Component {
         this.setState({deck_name: event.target.value})
     }
     saveDeck() {
-        MagicAPI.put('/api/decks/'+this.state.deck_name + '/',
+        MagicAPI.post('/api/decks/'+this.state.deck_name + '/',
             {
                 body:{
                     cards:_.map(this.state.deck_cards, 'external_id')
@@ -318,6 +319,7 @@ class MTGAdmin extends Component {
         }
         return MagicAPI.get(url).then(data => {
             this.setState({
+                card_count: data.count,
                 next: data.next,
                 previous: data.previous,
                 all_cards: data.results,
