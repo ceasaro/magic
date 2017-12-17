@@ -91,7 +91,7 @@ class Card(models.Model, CardTypes):
     name = models.CharField(max_length=256)
     image = models.FileField(upload_to=card_image_path, null=True, blank=True)
     external_id = models.CharField(primary_key=True, max_length=50, editable=False)
-    set = models.ForeignKey(Set, blank=False, null=True, related_name='cards')
+    set = models.ForeignKey(Set, blank=False, null=True, related_name='cards', on_delete=models.SET_NULL)
     _types = models.CharField(max_length=1024)
     _subtypes = models.CharField(max_length=1024, null=True)
     _supertypes = models.CharField(max_length=1024, null=True)
@@ -221,7 +221,7 @@ class Card(models.Model, CardTypes):
 
 
 class Player(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     live = models.IntegerField(default=20)
     poison_counters = models.IntegerField(default=0)
     mana_pool = ManaField()
@@ -229,7 +229,7 @@ class Player(models.Model):
 
 class Deck(models.Model):
     name = models.CharField(max_length=64, unique=True)
-    set = models.ForeignKey(Set, null=True, blank=True)
+    set = models.ForeignKey(Set, null=True, blank=True, on_delete=models.SET_NULL)
     cards = models.ManyToManyField(Card, related_name='deck')
 
 

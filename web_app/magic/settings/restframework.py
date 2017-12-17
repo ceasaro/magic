@@ -9,5 +9,5 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
-    'EXCEPTION_HANDLER': 'magic.core.api.views.exception_handler.magic_exception_handler',
+    'EXCEPTION_HANDLER': 'magic.api.views.exception_handler.magic_exception_handler',
 }

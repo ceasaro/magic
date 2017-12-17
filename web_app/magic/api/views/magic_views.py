@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
-from magic.core.api.serializers.magic_serializers import CardSerializer, SetSerializer, DeckSerializer
-from magic.core.api.views.BaseViews import MagicViewSet, MagicModelViewSet
+from magic.api.serializers.magic_serializers import CardSerializer, SetSerializer, DeckSerializer
+from magic.api.views.BaseViews import MagicViewSet, MagicModelViewSet
 from magic.core.models import Card, Set, Deck
 
 

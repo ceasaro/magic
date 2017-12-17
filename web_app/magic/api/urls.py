@@ -2,8 +2,8 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from magic.core.api.views.auth_views import UserViewSet
-from magic.core.api.views.magic_views import CardViewSet, SetViewSet, CardTypeViewSet, DeckViewSet
+from magic.api.views.auth_views import UserViewSet
+from magic.api.views.magic_views import CardViewSet, SetViewSet, CardTypeViewSet, DeckViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, 'User')
@@ -12,6 +12,7 @@ router.register(r'sets', SetViewSet, 'Set')
 router.register(r'card_types', CardTypeViewSet, 'CardTypes')
 router.register(r'decks', DeckViewSet, 'Deck')
 
+app_name='api'
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^token/$', TokenObtainPairView.as_view(), name='token_obtain_pair'),

@@ -7,9 +7,9 @@ from rest_framework.decorators import list_route
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 
-from magic.core.api import permissions
-from magic.core.api.serializers.auth_serializers import UserSerializer
-from magic.core.api.views.BaseViews import MagicModelViewSet
+from magic.api import permissions
+from magic.api.serializers.auth_serializers import UserSerializer
+from magic.api.views.BaseViews import MagicModelViewSet
 
 
 class UserViewSet(MagicModelViewSet):
