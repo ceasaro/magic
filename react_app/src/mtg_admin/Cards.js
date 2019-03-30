@@ -61,7 +61,7 @@ class Card extends Component {
 
     downloadImage() {
         this.setState({loading: true});
-        MagicAPI.put('/api/cards/' + this.state.card.external_id + '/download_img/')
+        MagicAPI.get('/api/cards/' + this.state.card.external_id + '/download_img/')
             .then(data => {
                 this.setState({
                     card: data,
