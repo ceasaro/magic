@@ -16,10 +16,10 @@ def import_card_image(card_name):
     try:
         page = urlopen(url).read().decode('utf-8')
         soup = BeautifulSoup(page, "html.parser")
-        card_img = soup.find('img', {'alt': card_name})
+        card_img = soup.find('img', {'class': 'card'})
         if card_img:
             img_url = card_img.get('src')
-            return magiccards_domain+img_url
+            return img_url
         else:
             raise MagicImportException("Could not download image from: {}. May be the card name doesn't match exactly".format(url))
     except Exception as e:

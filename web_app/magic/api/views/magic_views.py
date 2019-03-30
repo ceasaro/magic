@@ -1,6 +1,7 @@
 from PIL import Image
 from django.http import HttpResponse
 from rest_framework.decorators import detail_route
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 
 from magic.api.serializers.magic_serializers import CardSerializer, SetSerializer, DeckSerializer
@@ -69,15 +70,12 @@ class CardViewSet(MagicModelViewSet):
         return Response(serializer.data)
 
 
-class DeckViewSet(MagicModelViewSet):
+class DeckViewSet(MagicModelViewSet, CreateModelMixin):
     serializer_class = DeckSerializer
     lookup_field = 'name'
 
     def get_queryset(self):
         return Deck.objects.all()
-
-    def get_object(self):
-        return super().get_object()
 
 
 class CardTypeViewSet(MagicViewSet):

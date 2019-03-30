@@ -16,7 +16,7 @@ class MTGAdmin extends Component {
         this.state = {
             card_count: 0,
             all_cards: [],
-            deck_name: 'My new deck',
+            deck_name: 'Starter player A',
             deck_cards: [],
             filter: {
                 sets: [],
@@ -278,12 +278,11 @@ class MTGAdmin extends Component {
         this.setState({deck_name: event.target.value})
     }
     saveDeck() {
-        MagicAPI.post('/api/decks/'+this.state.deck_name + '/',
-            {
-                body:{
-                    cards:_.map(this.state.deck_cards, 'external_id')
-                }
-            }).then(data => {
+        MagicAPI.post('/api/decks/', {
+                name: this.state.deck_name,
+                cards: _.map(this.state.deck_cards, 'external_id')
+            }
+        ).then(data => {
         })
     }
     componentDidMount() {

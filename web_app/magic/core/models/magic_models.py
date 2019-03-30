@@ -230,7 +230,7 @@ class Player(models.Model):
 class Deck(models.Model):
     name = models.CharField(max_length=64, unique=True)
     set = models.ForeignKey(Set, null=True, blank=True, on_delete=models.SET_NULL)
-    cards = models.ManyToManyField(Card, related_name='deck')
+    cards = models.ManyToManyField(Card, related_name='deck', null=True, blank=True)
 
 
 #
