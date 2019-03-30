@@ -188,7 +188,6 @@ class Card(models.Model, CardTypes):
                     red=red_mana,
                     green=green_mana)
 
-
     def is_supertype(self):
         return any(x in self.types for x in self.SUPERTYPES)
 
