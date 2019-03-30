@@ -18,7 +18,7 @@ class Card extends Component {
 
     onMouseEnter() {
         this.setState({
-            height: null,
+            height: '400px',
             previous_state: this.state
         })
     }

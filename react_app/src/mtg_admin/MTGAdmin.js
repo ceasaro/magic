@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import '../css/MTGAdmin.css';
 import '../css/layout/magic.css';
 import MagicAPI from './APIClient'
+import Deck from './Deck';
 import Card from './Cards';
 import Mana from './Mana';
 import {Sets, SetsFilter} from './Sets'
@@ -16,8 +17,7 @@ class MTGAdmin extends Component {
         this.state = {
             card_count: 0,
             all_cards: [],
-            deck_name: 'Starter player A',
-            deck_cards: [],
+            selected_cards: [],
             filter: {
                 sets: [],
                 card_types: [],
@@ -37,6 +37,8 @@ class MTGAdmin extends Component {
     }
 
     render() {
+        console.log('MTGAdmin.js');
+        console.log(this.state.selected_cards);
         const next_button_attrs = {};
         if (!this.state.next) {
             next_button_attrs['disabled'] = 'disabled'
@@ -47,12 +49,7 @@ class MTGAdmin extends Component {
         }
         const all_cards = this.state.all_cards.map((card) =>
             <div key={card.external_id} className="col">
-                <Card card={card} height={120} onClick={() => this.handleAllCardsClick(card)}/>
-            </div>
-        );
-        const deck_cards = this.state.deck_cards.map((deck_card, index) =>
-            <div key={deck_card.external_id + '_' + index} className="col">
-                <Card card={deck_card} height={120} onClick={() => this.handleDeckCardsClick(deck_card)}/>
+                <Card card={card} height={120} onClick={() => this.handleCardClick(card)}/>
             </div>
         );
         return (
@@ -156,20 +153,7 @@ class MTGAdmin extends Component {
 
                 </div>
                 <div className="row">
-                    <div className="new-deck-container">
-                        <div className="col">
-                            <div className="row deck-name">
-                                <input type="text" value={this.state.deck_name} onChange={this.setDeckName.bind(this)}/>
-                                <span>{this.state.deck_name}</span>
-                            </div>
-                            <div className="row deck-cards">
-                                {deck_cards}
-                            </div>
-                            <div className="row">
-                                <button className="btn btn-primary" type="submit" onClick={this.saveDeck.bind(this)}>Save deck</button>
-                            </div>
-                        </div>
-                    </div>
+                    <Deck selected_cards={this.state.selected_cards}/>
                 </div>
 
                 <div className="row footer">
@@ -260,31 +244,12 @@ class MTGAdmin extends Component {
         })
     }
 
-    handleAllCardsClick(card) {
-        let deck_cards = this.state.deck_cards.splice(0);
-        deck_cards.push(card);
-        this.setState({deck_cards: deck_cards})
+    handleCardClick(card) {
+        let selected_cards = this.state.selected_cards.splice(0);
+        selected_cards.push(card);
+        this.setState({selected_cards: selected_cards})
     }
 
-    handleDeckCardsClick(card) {
-        let deck_cards = this.state.deck_cards.splice(0);
-        _.remove(deck_cards, function (c) {
-            return card.external_id === c.external_id
-        });
-        this.setState({deck_cards: deck_cards})
-    }
-
-    setDeckName(event) {
-        this.setState({deck_name: event.target.value})
-    }
-    saveDeck() {
-        MagicAPI.post('/api/decks/', {
-                name: this.state.deck_name,
-                cards: _.map(this.state.deck_cards, 'external_id')
-            }
-        ).then(data => {
-        })
-    }
     componentDidMount() {
         this.loadData();
     }
