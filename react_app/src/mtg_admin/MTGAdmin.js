@@ -37,8 +37,6 @@ class MTGAdmin extends Component {
     }
 
     render() {
-        console.log('MTGAdmin.js');
-        console.log(this.state.selected_cards);
         const next_button_attrs = {};
         if (!this.state.next) {
             next_button_attrs['disabled'] = 'disabled'

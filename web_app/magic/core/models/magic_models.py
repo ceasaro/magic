@@ -52,8 +52,8 @@ class CardQuerySet(models.QuerySet):
 
     def search(self, q=None, w=None, u=None, b=None, r=None, g=None, c=None, sets=None, card_types=None):
         query_set = self.valid_mana()
-        def filter_mana(mana, mana_value):
 
+        def filter_mana(mana, mana_value):
             if mana_value:
                 if isinstance(mana_value, int) or (isinstance(mana_value, str) and mana_value.isdigit() ):
                     mana_query = mana * int(mana_value)
@@ -107,9 +107,12 @@ class Card(models.Model, CardTypes):
 
     objects = CardQuerySet.as_manager()
 
+    class Meta:
+        ordering = ['name', ]
+
     def download_image(self, refresh=False, url=None):
         if not self.image or refresh or url:
-            img_url = url or import_card_image(self.name)
+            img_url = url or import_card_image(self)
             if img_url:
                 img_model_name = card_image_path(self, img_url)
                 img_file_name = os.path.join(settings.MEDIA_ROOT, img_model_name)
@@ -226,10 +229,35 @@ class Player(models.Model):
     mana_pool = ManaField()
 
 
+class DeckQuerySet(models.QuerySet):
+
+    def search(self, query):
+        if query is None:
+            return self.all()
+        return self.filter(name__icontains=query)
+
+
 class Deck(models.Model):
     name = models.CharField(max_length=64, unique=True)
     set = models.ForeignKey(Set, null=True, blank=True, on_delete=models.SET_NULL)
-    cards = models.ManyToManyField(Card, related_name='deck', null=True, blank=True)
+
+    objects = DeckQuerySet.as_manager()
+
+    class Meta:
+        ordering = ['name', ]
+
+    def add_card(self, card):
+        if isinstance(card, str):
+            card = Card.objects.get(external_id=card)
+        DeckCard.objects.create(card=card, deck=self)
+
+    def __str__(self):
+        return self.name
+
+
+class DeckCard(models.Model):
+    card = models.ForeignKey(Card, related_name='decks')
+    deck = models.ForeignKey(Deck, related_name='cards')
 
 
 #

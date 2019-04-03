@@ -19,8 +19,32 @@ let MagicAPI = {
         });
         return this._fetch(path, post_options)
     },
-    put: function (path, put_options) {
-        _.assignIn(put_options, {method: 'put'});
+    put: function (path, data = {}, put_options = {}) {
+        _.assignIn(put_options, {
+            method: 'put',
+            mode: "cors", // no-cors, cors, *same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+                "Content-Type": "application/json",
+                // "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: JSON.stringify(data), // body data type must match "Content-Type" header
+        });
+        return this._fetch(path, put_options)
+    },
+    patch: function (path, data = {}, put_options = {}) {
+        _.assignIn(put_options, {
+            method: 'patch',
+            mode: "cors", // no-cors, cors, *same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+                "Content-Type": "application/json",
+                // "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: JSON.stringify(data), // body data type must match "Content-Type" header
+        });
         return this._fetch(path, put_options)
     },
     remove: function (path, delete_options) {

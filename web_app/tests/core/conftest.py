@@ -24,5 +24,12 @@ def player_cees():
 def deck(card_library):
     deck = Deck.objects.create(name='test deck')
     for card in card_library.cards:
-        deck.cards.add(card.card)
+        deck.add_card(card.card)
     return deck
+
+
+@pytest.fixture
+def decks(deck, card_library):
+    deck2 = Deck.objects.create(name='test deck2')
+    deck3 = Deck.objects.create(name='my special set')
+    return [deck, deck2, deck3]

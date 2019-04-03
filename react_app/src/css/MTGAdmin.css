@@ -232,4 +232,9 @@ i.delete {
   .mana-filter-selectors .mana-filter-selector .mana-big {
     display: block; }
 
+/* modals */
+.modal .found-img-wrapper {
+  background-color: #EEE;
+  padding: 20px; }
+
 /*# sourceMappingURL=MTGAdmin.css.map */

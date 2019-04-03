@@ -1,12 +1,17 @@
+import logging
+
 from PIL import Image
 from django.http import HttpResponse
 from rest_framework.decorators import detail_route
-from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 
-from magic.api.serializers.magic_serializers import CardSerializer, SetSerializer, DeckSerializer
+from magic.api.mixins import ActionSerializerMixin
+from magic.api.serializers.magic_serializers import CardSerializer, SetSerializer, DeckSerializer, DeckDetailSerializer
 from magic.api.views.BaseViews import MagicViewSet, MagicModelViewSet
+from magic.core.exception import MagicCardImageImportException
 from magic.core.models import Card, Set, Deck
+
+log = logging.getLogger(__name__)
 
 
 class SetViewSet(MagicModelViewSet):
@@ -65,17 +70,27 @@ class CardViewSet(MagicModelViewSet):
     @detail_route()
     def download_img(self, request, pk):
         card = self.get_object()
-        card.download_image()
-        serializer = self.serializer_class(card)
-        return Response(serializer.data)
+        try:
+            card.download_image()
+            data = self.serializer_class(card).data
+        except MagicCardImageImportException as e:
+            log.warning(e)
+            data = self.serializer_class(card).data
+            data['found_img_urls'] = e.found_img_urls
+        return Response(data)
 
 
-class DeckViewSet(MagicModelViewSet, CreateModelMixin):
+class DeckViewSet(ActionSerializerMixin, MagicModelViewSet):
     serializer_class = DeckSerializer
     lookup_field = 'name'
+    action_serializers = {
+        'retrieve': DeckDetailSerializer,
+        'list': DeckDetailSerializer
+    }
 
     def get_queryset(self):
-        return Deck.objects.all()
+        params = self.request.query_params
+        return Deck.objects.search(query=params.get('query'))
 
 
 class CardTypeViewSet(MagicViewSet):
