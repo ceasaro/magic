@@ -259,6 +259,9 @@ class DeckCard(models.Model):
     card = models.ForeignKey(Card, related_name='decks')
     deck = models.ForeignKey(Deck, related_name='cards')
 
+    class Meta:
+        ordering = ['card__name', ]
+
 
 #
 #   Model signals

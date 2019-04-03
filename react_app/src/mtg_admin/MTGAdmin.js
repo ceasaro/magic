@@ -17,7 +17,7 @@ class MTGAdmin extends Component {
         this.state = {
             card_count: 0,
             all_cards: [],
-            selected_cards: [],
+            selected_card: null,
             filter: {
                 sets: [],
                 card_types: [],
@@ -150,9 +150,7 @@ class MTGAdmin extends Component {
                     </div>
 
                 </div>
-                <div className="row">
-                    <Deck selected_cards={this.state.selected_cards}/>
-                </div>
+                <Deck selected_card={this.state.selected_card}/>
 
                 <div className="row footer">
                     <span>Cees van Wieringen, 2017</span>
@@ -243,9 +241,7 @@ class MTGAdmin extends Component {
     }
 
     handleCardClick(card) {
-        let selected_cards = this.state.selected_cards.splice(0);
-        selected_cards.push(card);
-        this.setState({selected_cards: selected_cards})
+        this.setState({selected_card: card})
     }
 
     componentDidMount() {

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import MagicAPI from "./APIClient";
 import Card from './Cards';
 import _ from "lodash";
+import update from 'immutability-helper';
 
 class Deck extends Component {
 
@@ -11,51 +12,47 @@ class Deck extends Component {
             new_deck_name: '',
             deck: null,
             found_decks: [],
-            selected_cards: options.selected_cards
+            selected_card: options.selected_card
         };
+        this.searchDeck('')
     }
 
     componentWillReceiveProps(props) {
-        this.setState({selected_cards: props.selected_cards});
+        if (this.state.deck && props.selected_card) {
+            let deck_cards = this.state.deck.cards.splice(0);
+            deck_cards.push(props.selected_card);
+            const new_deck = update(this.state.deck, {
+                cards: {$set: deck_cards},
+            });
+            this.setState({
+                deck: new_deck,
+                selected_card: props.selected_card
+            })
+        }
     }
 
     render() {
-        const selected_cards = this.state.selected_cards.map((selected_card, index) =>
-            <div key={selected_card.external_id + '_' + index} className="col">
-                <Card card={selected_card} height={120} onClick={() => this.handleSelectedCardClick(selected_card)}/>
-            </div>
-        );
         const deck_cards = this.state.deck
             ? this.state.deck.cards.map((deck_card, index) =>
-                <div key={deck_card.external_id + '_' + index} className="col">
+                <div className="col" key={deck_card.external_id + '_' + index}>
                     <Card card={deck_card} height={120} onClick={() => this.handleDeckCardClick(deck_card)}/>
                 </div>
             )
             : <div>Deck has no cards</div>;
         const button_title = this.state.deck ? "Save " + this.state.deck.name + " deck" : "Create " + this.state.new_deck_name + " deck";
-        const found_decks = this.state.found_decks.map((deck) =>
-            <li key={deck.name}>
+        const found_deck_items = this.state.found_decks.map((deck) =>
+            <li key={deck.name} className="list-group-item">
                 <button className="btn btn-primary" onClick={() => this.handleSelectDeckClick(deck)}
                         value={deck.name}>{deck.name}</button>
             </li>
         );
         return (
-            <div className="new-deck-container">
-                <div className="col">
-                    <div className="row deck-name">
+            <div className="row new-deck-container">
+                <div className="col ">
+                    <div className="row">
                         <div className="col">
-                            <input type="text" value={this.state.new_deck_name} onChange={this.setDeckName.bind(this)}/>
+                            <h3>{this.state.deck ? this.state.deck.name + "(" + this.state.deck.cards.length + "cards)" : ''} </h3>
                         </div>
-                        <div className="col">
-                            <input type="text" onChange={this.handleSearchDeck.bind(this)}/>
-                            Search deck
-                        </div>
-                        <div className="col">
-                            {found_decks}
-                        </div>
-                    </div>
-                    <div className="row selected-cards">
-                        {selected_cards}
                     </div>
                     <div className="row deck-cards">
                         {deck_cards}
@@ -66,6 +63,18 @@ class Deck extends Component {
                                     type="submit" onClick={this.saveDeck.bind(this)}>{button_title}
                             </button>
                         </div>
+                    </div>
+                </div>
+                <div className="col-2">
+                    <div>
+                        <input type="text" value={this.state.new_deck_name} onChange={this.setDeckName.bind(this)}
+                               placeholder="new deck name"/>
+                    </div>
+                    <div>
+                        <input type="text" onChange={this.handleSearchDeck.bind(this)} placeholder="search deck"/>
+                    </div>
+                    <div>
+                        <ul className="list-group">{found_deck_items}</ul>
                     </div>
                 </div>
             </div>
@@ -81,7 +90,7 @@ class Deck extends Component {
         if (this.state.deck) {
             MagicAPI.put('/api/decks/' + this.state.deck.name + '/', {
                     name: this.state.new_deck_name || this.state.deck.name,
-                    cards: _.map(this.state.deck.cards, 'external_id').concat(_.map(this.state.selected_cards, 'external_id'))
+                    cards: _.map(this.state.deck.cards, 'external_id')
                 }
             ).then(data => {
                 // this.setState({deck: data});
@@ -89,7 +98,7 @@ class Deck extends Component {
         } else {
             MagicAPI.post('/api/decks/', {
                     name: this.state.new_deck_name,
-                    cards: _.map(this.state.deck.cards, 'external_id').concat(_.map(this.state.selected_cards, 'external_id'))
+                    cards: _.map(this.state.deck.cards, 'external_id')
                 }
             ).then(data => {
                 // this.setState({deck: data});
@@ -99,11 +108,15 @@ class Deck extends Component {
 
     handleSearchDeck(event) {
         let query = event.target.value;
-        if (query.length > 2) {
-            MagicAPI.get('/api/decks/?query=' + query).then(data => {
-                this.setState({found_decks: data.results})
-            })
+        if (query.length > 1) {
+            this.searchDeck(query);
         }
+    }
+
+    searchDeck(query) {
+        MagicAPI.get('/api/decks/?query=' + query).then(data => {
+            this.setState({found_decks: data.results})
+        })
     }
 
     handleSelectDeckClick(clicked_deck) {
@@ -111,19 +124,15 @@ class Deck extends Component {
     }
 
     handleDeckCardClick(card) {
-        let deck_cards = this.state.deck.cards.splice(0);
-        _.remove(deck_cards, function (c) {
-            return card.external_id === c.external_id
+        let deck_cards = this.state.deck.cards.splice(0),
+            first_index=deck_cards.indexOf(card);
+        if (first_index > -1) {
+            deck_cards.splice(first_index, 1);
+        }
+        const new_deck = update(this.state.deck, {
+            cards: {$set: deck_cards},
         });
-        this.setState({selected_cards: deck_cards})
-    }
-
-    handleSelectedCardClick(card) {
-        let selected_cards = this.state.selected_cards.splice(0);
-        _.remove(selected_cards, function (c) {
-            return card.external_id === c.external_id
-        });
-        this.setState({selected_cards: selected_cards})
+        this.setState({deck: new_deck})
     }
 
 }

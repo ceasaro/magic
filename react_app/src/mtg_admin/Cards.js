@@ -109,11 +109,11 @@ class Card extends Component {
         } else {
             image_html.push(
                 <div key="card-download-button">
-                    <button className="btn btn-primary" type="submit" onClick={this.downloadImage.bind(this)}>Download
+                    <button className="btn btn-sm btn-light" type="submit" onClick={this.downloadImage.bind(this)}>Download
                     </button>
                 </div>)
         }
-        return (<div>
+        return (<span>
             <div className='card-img-wrapper'>
                 <div className='card-name'>{this.state.card.name}</div>
                 {image_html}
@@ -130,7 +130,7 @@ class Card extends Component {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-            </div>
+            </span>
         )
     }
 
