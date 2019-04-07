@@ -251,7 +251,6 @@ class MTGAdmin extends Component {
     }
 
     componentDidMount() {
-        console.log('MTGAdmin did mount');
         this.loadData();
     }
 

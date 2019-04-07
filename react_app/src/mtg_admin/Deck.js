@@ -18,8 +18,6 @@ class Deck extends Component {
     }
 
     componentWillReceiveProps(props) {
-        console.log("Deck.js");
-        console.log(props);
         let selected_card = props.processSelectedCard();
         if (this.state.deck && selected_card) {
             let deck_cards = this.state.deck.cards.splice(0);
