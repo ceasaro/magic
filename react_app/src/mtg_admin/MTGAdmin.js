@@ -150,7 +150,7 @@ class MTGAdmin extends Component {
                     </div>
 
                 </div>
-                <Deck selected_card={this.state.selected_card}/>
+                <Deck processSelectedCard={this.processSelectedCard.bind(this)}/>
 
                 <div className="row footer">
                     <span>Cees van Wieringen, 2017</span>
@@ -158,7 +158,13 @@ class MTGAdmin extends Component {
             </div> // container-fluid
         );
     }
-
+    processSelectedCard() {
+        let selected_card = this.state.selected_card;
+        if (selected_card) {
+            this.setState({selected_card: null})
+        }
+        return selected_card
+    }
     handleSearchChange(event) {
         let query = event.target.value.length > 2 ? event.target.value : '';
         const new_filter = update(this.state.filter, {
@@ -245,6 +251,7 @@ class MTGAdmin extends Component {
     }
 
     componentDidMount() {
+        console.log('MTGAdmin did mount');
         this.loadData();
     }
 

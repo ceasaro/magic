@@ -18,15 +18,17 @@ class Deck extends Component {
     }
 
     componentWillReceiveProps(props) {
-        if (this.state.deck && props.selected_card) {
+        console.log("Deck.js");
+        console.log(props);
+        let selected_card = props.processSelectedCard();
+        if (this.state.deck && selected_card) {
             let deck_cards = this.state.deck.cards.splice(0);
-            deck_cards.push(props.selected_card);
+            deck_cards.push(selected_card);
             const new_deck = update(this.state.deck, {
                 cards: {$set: deck_cards},
             });
             this.setState({
                 deck: new_deck,
-                selected_card: props.selected_card
             })
         }
     }
