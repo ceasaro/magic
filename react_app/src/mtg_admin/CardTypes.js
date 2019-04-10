@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import MagicAPI from './APIClient'
+import MagicAPI from '../apis/APIClient'
 
 class CardTypesFilter extends Component {
 

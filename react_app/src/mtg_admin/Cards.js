@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import MagicAPI from './APIClient'
+import MagicAPI from '../apis/APIClient'
 
 
 class Card extends Component {

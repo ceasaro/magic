@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import '../css/MTGAdmin.css';
 import '../css/layout/magic.css';
-import MagicAPI from './APIClient'
+import MagicAPI from '../apis/APIClient'
 import Deck from './Deck';
 import Card from './Cards';
 import Mana from './Mana';
@@ -51,7 +51,7 @@ class MTGAdmin extends Component {
             </div>
         );
         return (
-            <div className="container-fluid hidden">
+            <div id="MTGAdmin">
                 <div className="row filter-wrapper">
                     <div className="col">
                         <div className="row">
@@ -152,10 +152,7 @@ class MTGAdmin extends Component {
                 </div>
                 <Deck processSelectedCard={this.processSelectedCard.bind(this)}/>
 
-                <div className="row footer">
-                    <span>Cees van Wieringen, 2017</span>
-                </div>
-            </div> // container-fluid
+            </div> // MTGAdmin
         );
     }
     processSelectedCard() {

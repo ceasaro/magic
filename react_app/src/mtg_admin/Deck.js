@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import MagicAPI from "./APIClient";
+import MagicAPI from '../apis/APIClient'
 import Card from './Cards';
 import _ from "lodash";
 import update from 'immutability-helper';
