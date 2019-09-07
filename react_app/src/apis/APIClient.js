@@ -60,6 +60,28 @@ let MagicAPI = {
             .then(this._handleErrors)
             .then(response => response.json())
     },
+    _fetch_with_jwt: function (path, options={}, callback) {
+        return this.request_jwt(jwt => {
+            options.headers = new Headers({Authorization: `JWT ${jwt}`});
+            window
+                .fetch(path.startsWith('http') ? path : this.API_DOMAIN + path, options)
+                .then(this._handleErrors)
+                .then(response => response.json())
+                .then(json => callback(json))
+        });
+    },
+    request_jwt(callback) {
+        if (this._jwt && false) {
+            return callback(this._jwt);
+        } else {
+            fetch('/api/V1/jwt_tokens/sfam')
+                .then(response => response.json())
+                .then(json => {
+                    this._jwt = json.jwt;
+                    callback(this._jwt);
+                })
+        }
+    },
     _handleErrors: function(response) {
     if (!response.ok) {
         throw Error(response.statusText);

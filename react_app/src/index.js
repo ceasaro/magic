@@ -11,7 +11,7 @@ ReactDOM.render(
     <div className="container-fluid hidden">
         {compontent}
         <div className="row footer">
-            <span>Cees van Wieringen, 2017</span>
+            <span>Cees van Wieringen, 2017 - 2019</span>
         </div>
     </div> // container-fluid
     ,
