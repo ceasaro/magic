@@ -154,7 +154,7 @@ class ManaField(models.CharField):
     def db_type(self, connection):
         return super().db_type(connection)
 
-    def from_db_value(self, value, expression, connection, context):
+    def from_db_value(self, value, expression, connection):
         if value is None:
             return value
         return Mana(value)

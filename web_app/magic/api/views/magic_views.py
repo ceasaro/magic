@@ -2,7 +2,7 @@ import logging
 
 from PIL import Image
 from django.http import HttpResponse
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from magic.api.mixins import ActionSerializerMixin
@@ -55,7 +55,7 @@ class CardViewSet(MagicModelViewSet):
 
         return queryset
 
-    @detail_route()
+    @action(detail=True)
     def image(self, request, pk):
         card = self.get_object()
         image_data = card.image
@@ -67,7 +67,7 @@ class CardViewSet(MagicModelViewSet):
             red.save(response, "PNG")
             return response
 
-    @detail_route()
+    @action(detail=True)
     def download_img(self, request, pk):
         card = self.get_object()
         try:

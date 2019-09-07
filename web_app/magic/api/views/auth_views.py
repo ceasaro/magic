@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from rest_framework import permissions as drf_permissions, status
-from rest_framework.decorators import list_route
+from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 
@@ -21,7 +21,7 @@ class UserViewSet(MagicModelViewSet):
         print ("T:{}".format(datetime.now()))
         return super().list(request, *args, **kwargs)
 
-    @list_route(methods=['post'], permission_classes=(drf_permissions.AllowAny,))
+    @action(detail=False, methods=['post'], permission_classes=(drf_permissions.AllowAny,))
     def register(self, request):
         try:
             user = User.objects.get(username=request.data.get('username'))

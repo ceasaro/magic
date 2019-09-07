@@ -256,8 +256,8 @@ class Deck(models.Model):
 
 
 class DeckCard(models.Model):
-    card = models.ForeignKey(Card, related_name='decks')
-    deck = models.ForeignKey(Deck, related_name='cards')
+    card = models.ForeignKey(Card, related_name='decks', on_delete=models.CASCADE)
+    deck = models.ForeignKey(Deck, related_name='cards', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['card__name', ]
