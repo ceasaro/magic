@@ -9,8 +9,8 @@ from magic.game import urls as game_urls
 
 urlpatterns = [
     # url(r'^about/$', TemplateView.as_view(template_name="about.html")),
-    url(r'^game/', include(game_urls)),
-    url(r'^api/', include(core_api_urls)),
-    url(r'^admin/', admin.site.urls),
-    url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
+    url(r"^game/", include(game_urls)),
+    url(r"^api/", include(core_api_urls)),
+    url(r"^admin/", admin.site.urls),
+    url(r"^$", TemplateView.as_view(template_name="home.html"), name="home"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

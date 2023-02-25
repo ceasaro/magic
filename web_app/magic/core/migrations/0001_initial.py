@@ -19,53 +19,104 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Card',
+            name="Card",
             fields=[
-                ('name', models.CharField(max_length=256)),
-                ('external_id', models.CharField(editable=False, max_length=50, primary_key=True, serialize=False)),
-                ('_types', models.CharField(max_length=1024)),
-                ('_subtypes', models.CharField(max_length=1024)),
-                ('type_line', models.CharField(blank=True, max_length=256, null=True)),
-                ('text', models.CharField(blank=True, max_length=1024, null=True)),
-                ('collector_number', models.CharField(blank=True, max_length=64, null=True)),
-                ('mana_cost', magic.core.models.fields.ManaField(blank=True, default='', max_length=32, null=True)),
-                ('_power', models.CharField(max_length=4)),
-                ('_toughness', models.CharField(max_length=4)),
+                ("name", models.CharField(max_length=256)),
+                (
+                    "external_id",
+                    models.CharField(
+                        editable=False, max_length=50, primary_key=True, serialize=False
+                    ),
+                ),
+                ("_types", models.CharField(max_length=1024)),
+                ("_subtypes", models.CharField(max_length=1024)),
+                ("type_line", models.CharField(blank=True, max_length=256, null=True)),
+                ("text", models.CharField(blank=True, max_length=1024, null=True)),
+                (
+                    "collector_number",
+                    models.CharField(blank=True, max_length=64, null=True),
+                ),
+                (
+                    "mana_cost",
+                    magic.core.models.fields.ManaField(
+                        blank=True, default="", max_length=32, null=True
+                    ),
+                ),
+                ("_power", models.CharField(max_length=4)),
+                ("_toughness", models.CharField(max_length=4)),
             ],
             bases=(models.Model, magic.core.models.types.CardTypes),
         ),
         migrations.CreateModel(
-            name='Deck',
+            name="Deck",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=64)),
-                ('cards', models.ManyToManyField(related_name='deck', to='core.Card')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=64)),
+                ("cards", models.ManyToManyField(related_name="deck", to="core.Card")),
             ],
         ),
         migrations.CreateModel(
-            name='Player',
+            name="Player",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('live', models.IntegerField(default=20)),
-                ('poison_counters', models.IntegerField(default=0)),
-                ('mana_pool', magic.core.models.fields.ManaField(max_length=32)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("live", models.IntegerField(default=20)),
+                ("poison_counters", models.IntegerField(default=0)),
+                ("mana_pool", magic.core.models.fields.ManaField(max_length=32)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Set',
+            name="Set",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=256, unique=True)),
-                ('code', models.CharField(max_length=16)),
-                ('type', models.CharField(max_length=64)),
-                ('gathererCode', models.CharField(blank=True, max_length=16, null=True)),
-                ('releaseDate', models.DateField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=256, unique=True)),
+                ("code", models.CharField(max_length=16)),
+                ("type", models.CharField(max_length=64)),
+                (
+                    "gathererCode",
+                    models.CharField(blank=True, max_length=16, null=True),
+                ),
+                ("releaseDate", models.DateField()),
             ],
         ),
         migrations.AddField(
-            model_name='card',
-            name='set',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='cards', to='core.Set'),
+            model_name="card",
+            name="set",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="cards",
+                to="core.Set",
+            ),
         ),
     ]

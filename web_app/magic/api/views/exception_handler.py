@@ -12,8 +12,10 @@ def magic_exception_handler(exc, context):
 
     if isinstance(exc, MagicException):
         set_rollback()
-        return Response({'detail': str(exc)},
-                        status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                        headers={})
+        return Response(
+            {"detail": str(exc)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            headers={},
+        )
 
     return response

@@ -21,7 +21,7 @@ from magic.core.models.fields import ManaField, Mana
 from magic.core.models.types import CardTypes, LandTypes
 from magic.im_export.magiccards import import_card_image
 
-CARD_IMAGES_ROOT = os.path.join(settings.MEDIA_ROOT, 'CARD_IMAGES')
+CARD_IMAGES_ROOT = os.path.join(settings.MEDIA_ROOT, "CARD_IMAGES")
 
 
 class Set(models.Model):
@@ -42,22 +42,39 @@ def card_image_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     if filename:
         path_name, img_ext = os.path.splitext(filename)
-        return 'CARD_IMAGES/{0}/{1}{2}'.format(slugify(instance.set.name), slugify(instance.name), img_ext)
+        return "CARD_IMAGES/{0}/{1}{2}".format(
+            slugify(instance.set.name), slugify(instance.name), img_ext
+        )
 
 
 class CardQuerySet(models.QuerySet):
-
     def valid_mana(self):
         return self.exclude(mana_cost__contains=Mana.NOT_IMPLEMENTED)
 
-    def search(self, q=None, w=None, u=None, b=None, r=None, g=None, c=None, sets=None, card_types=None):
+    def search(
+        self,
+        q=None,
+        w=None,
+        u=None,
+        b=None,
+        r=None,
+        g=None,
+        c=None,
+        sets=None,
+        card_types=None,
+    ):
         query_set = self.valid_mana()
 
         def filter_mana(mana, mana_value):
             if mana_value:
-                if isinstance(mana_value, int) or (isinstance(mana_value, str) and mana_value.isdigit() ):
+                if isinstance(mana_value, int) or (
+                    isinstance(mana_value, str) and mana_value.isdigit()
+                ):
                     mana_query = mana * int(mana_value)
-                elif isinstance(mana_value, str) and mana_value.upper().replace(mana, '') == '':
+                elif (
+                    isinstance(mana_value, str)
+                    and mana_value.upper().replace(mana, "") == ""
+                ):
                     mana_query = mana_value.upper()
                 else:
                     mana_query = None
@@ -66,7 +83,6 @@ class CardQuerySet(models.QuerySet):
                 else:
                     return query_set.none()
             return query_set
-
 
         if q:
             query_set = query_set.filter(name__icontains=q)
@@ -83,7 +99,16 @@ class CardQuerySet(models.QuerySet):
         if card_types:
             card_types = [card_types] if isinstance(card_types, str) else card_types
             query_set = query_set.filter(
-                reduce(operator.and_, (Q(_types__contains=ct) | Q(_subtypes__contains=ct) | Q(_supertypes__contains=ct) for ct in card_types)))
+                reduce(
+                    operator.and_,
+                    (
+                        Q(_types__contains=ct)
+                        | Q(_subtypes__contains=ct)
+                        | Q(_supertypes__contains=ct)
+                        for ct in card_types
+                    ),
+                )
+            )
         return query_set
 
 
@@ -91,14 +116,16 @@ class Card(models.Model, CardTypes):
     name = models.CharField(max_length=256)
     image = models.FileField(upload_to=card_image_path, null=True, blank=True)
     external_id = models.CharField(primary_key=True, max_length=50, editable=False)
-    set = models.ForeignKey(Set, blank=False, null=True, related_name='cards', on_delete=models.SET_NULL)
+    set = models.ForeignKey(
+        Set, blank=False, null=True, related_name="cards", on_delete=models.SET_NULL
+    )
     _types = models.CharField(max_length=1024)
     _subtypes = models.CharField(max_length=1024, null=True)
     _supertypes = models.CharField(max_length=1024, null=True)
     type_line = models.CharField(max_length=256, null=True, blank=True)
     text = models.CharField(max_length=1024, null=True, blank=True)
     collector_number = models.CharField(max_length=64, null=True, blank=True)
-    mana_cost = ManaField(default='', null=True, blank=True)
+    mana_cost = ManaField(default="", null=True, blank=True)
     cmc = models.IntegerField(default=0)
     _power = models.CharField(max_length=4)
     _toughness = models.CharField(max_length=4)
@@ -108,7 +135,9 @@ class Card(models.Model, CardTypes):
     objects = CardQuerySet.as_manager()
 
     class Meta:
-        ordering = ['name', ]
+        ordering = [
+            "name",
+        ]
 
     def download_image(self, refresh=False, url=None):
         if not self.image or refresh or url:
@@ -129,33 +158,35 @@ class Card(models.Model, CardTypes):
 
     @property
     def power(self):
-        if self._power == '*':
+        if self._power == "*":
             return self._power
         return Decimal(self._power)
 
     @property
     def toughness(self):
-        if self._toughness == '*':
+        if self._toughness == "*":
             return self._toughness
         return Decimal(self._toughness)
 
     @property
     def types(self):
-        return self._types.split(',')
+        return self._types.split(",")
 
     @property
     def subtypes(self):
-        return self._subtypes.split(',')
+        return self._subtypes.split(",")
 
     @property
     def text_codes(self):
         if self.text:
-            return re.findall('\{(.?)\}', self.text)
+            return re.findall("\{(.?)\}", self.text)
 
     @property
     def mana_source(self):
         codes = self.text_codes
-        total_mana = any_mana = white_mana = blue_mana = black_mana = red_mana = green_mana = 0
+        total_mana = (
+            any_mana
+        ) = white_mana = blue_mana = black_mana = red_mana = green_mana = 0
         if codes:
             any_mana = codes.count(Mana.ANY)
             total_mana += any_mana
@@ -184,12 +215,14 @@ class Card(models.Model, CardTypes):
             elif LandTypes.FOREST in card_types:
                 green_mana += 1
 
-        return Mana(any=any_mana,
-                    white=white_mana,
-                    blue=blue_mana,
-                    black=black_mana,
-                    red=red_mana,
-                    green=green_mana)
+        return Mana(
+            any=any_mana,
+            white=white_mana,
+            blue=blue_mana,
+            black=black_mana,
+            red=red_mana,
+            green=green_mana,
+        )
 
     def is_supertype(self):
         return any(x in self.types for x in self.SUPERTYPES)
@@ -230,7 +263,6 @@ class Player(models.Model):
 
 
 class DeckQuerySet(models.QuerySet):
-
     def search(self, query):
         if query is None:
             return self.all()
@@ -244,7 +276,9 @@ class Deck(models.Model):
     objects = DeckQuerySet.as_manager()
 
     class Meta:
-        ordering = ['name', ]
+        ordering = [
+            "name",
+        ]
 
     def add_card(self, card):
         if isinstance(card, str):
@@ -256,11 +290,13 @@ class Deck(models.Model):
 
 
 class DeckCard(models.Model):
-    card = models.ForeignKey(Card, related_name='decks', on_delete=models.CASCADE)
-    deck = models.ForeignKey(Deck, related_name='cards', on_delete=models.CASCADE)
+    card = models.ForeignKey(Card, related_name="decks", on_delete=models.CASCADE)
+    deck = models.ForeignKey(Deck, related_name="cards", on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['card__name', ]
+        ordering = [
+            "card__name",
+        ]
 
 
 #
@@ -269,5 +305,5 @@ class DeckCard(models.Model):
 @receiver(post_save, sender=Player, dispatch_uid="add_player_to_group")
 def add_player_to_group(sender, instance, **kwargs):
     user = instance.user
-    user.groups.add(Group.objects.get(name='player'))
+    user.groups.add(Group.objects.get(name="player"))
     user.save()

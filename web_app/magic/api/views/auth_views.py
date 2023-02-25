@@ -18,13 +18,15 @@ class UserViewSet(MagicModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
 
     def list(self, request, *args, **kwargs):
-        print ("T:{}".format(datetime.now()))
+        print("T:{}".format(datetime.now()))
         return super().list(request, *args, **kwargs)
 
-    @action(detail=False, methods=['post'], permission_classes=(drf_permissions.AllowAny,))
+    @action(
+        detail=False, methods=["post"], permission_classes=(drf_permissions.AllowAny,)
+    )
     def register(self, request):
         try:
-            user = User.objects.get(username=request.data.get('username'))
+            user = User.objects.get(username=request.data.get("username"))
             return Response(self.serializer_class(user).data)
         except User.DoesNotExist:
             try:
@@ -32,7 +34,8 @@ class UserViewSet(MagicModelViewSet):
                     username=request.data.get("username"),
                     email=request.data.get("email"),
                 )
-                return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+                return Response(
+                    UserSerializer(user).data, status=status.HTTP_201_CREATED
+                )
             except IntegrityError as e:
                 raise ParseError(detail=e.message)
-

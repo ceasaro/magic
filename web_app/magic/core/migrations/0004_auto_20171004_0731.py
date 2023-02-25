@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_auto_20170917_1512'),
+        ("core", "0003_auto_20170917_1512"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='card',
-            name='_subtypes',
+            model_name="card",
+            name="_subtypes",
             field=models.CharField(max_length=1024, null=True),
         ),
     ]

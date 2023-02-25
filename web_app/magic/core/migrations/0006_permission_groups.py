@@ -14,9 +14,9 @@ def create_groups(apps, schema_editor):
         create_permissions(app_config, apps=apps, verbosity=0)
         app_config.models_module = None
 
-    Deck = apps.get_model('core', 'Deck')
-    Player = apps.get_model('core', 'Player')
-    player_group, created = Group.objects.get_or_create(name='player')
+    Deck = apps.get_model("core", "Deck")
+    Player = apps.get_model("core", "Player")
+    player_group, created = Group.objects.get_or_create(name="player")
 
     # add deck permissions
     deck_content_type = ContentType.objects.get_for_model(Deck)
@@ -33,9 +33,7 @@ def create_groups(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0005_auto_20171004_1058'),
+        ("core", "0005_auto_20171004_1058"),
     ]
 
-    operations = [
-        migrations.RunPython(create_groups)
-    ]
+    operations = [migrations.RunPython(create_groups)]

@@ -22,7 +22,6 @@ class MagicImportException(Exception):
 
 
 class MagicCardImageImportException(Exception):
-
     def __init__(self, msg, found_img_urls=None) -> None:
         super().__init__(msg)
         self.found_img_urls = found_img_urls if found_img_urls is not None else []

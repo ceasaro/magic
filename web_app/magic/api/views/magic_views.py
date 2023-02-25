@@ -6,7 +6,12 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from magic.api.mixins import ActionSerializerMixin
-from magic.api.serializers.magic_serializers import CardSerializer, SetSerializer, DeckSerializer, DeckDetailSerializer
+from magic.api.serializers.magic_serializers import (
+    CardSerializer,
+    SetSerializer,
+    DeckSerializer,
+    DeckDetailSerializer,
+)
 from magic.api.views.BaseViews import MagicViewSet, MagicModelViewSet
 from magic.core.exception import MagicCardImageImportException
 from magic.core.models import Card, Set, Deck
@@ -24,10 +29,10 @@ class SetViewSet(MagicModelViewSet):
 
     def get_queryset(self):
         queryset = Set.objects.all()
-        q = self.request.query_params.get('q', None)
+        q = self.request.query_params.get("q", None)
         if q:
             queryset = queryset.filter(name__icontains=q)
-        o = self.request.query_params.get('o', 'name')
+        o = self.request.query_params.get("o", "name")
         if o:
             queryset = queryset.order_by(o)
         return queryset
@@ -39,18 +44,18 @@ class CardViewSet(MagicModelViewSet):
     def get_queryset(self):
         queryset = Card.objects.all()
         params = self.request.query_params
-        set_name = params.get('s')
+        set_name = params.get("s")
         if set_name:
             queryset = queryset.filter(set__name=set_name)
         queryset = queryset.search(
-            q=self.request.query_params.get('q'),  # search query
-            w=self.request.query_params.get('w'),  # white mana
-            u=self.request.query_params.get('u'),  # blue mana
-            b=self.request.query_params.get('b'),  # black mana
-            r=self.request.query_params.get('r'),  # read mana
-            g=self.request.query_params.get('g'),  # green mana
-            c=self.request.query_params.get('c'),  # colorless mana
-            card_types=self.request.query_params.get('ct')
+            q=self.request.query_params.get("q"),  # search query
+            w=self.request.query_params.get("w"),  # white mana
+            u=self.request.query_params.get("u"),  # blue mana
+            b=self.request.query_params.get("b"),  # black mana
+            r=self.request.query_params.get("r"),  # read mana
+            g=self.request.query_params.get("g"),  # green mana
+            c=self.request.query_params.get("c"),  # colorless mana
+            card_types=self.request.query_params.get("ct"),
         )
 
         return queryset
@@ -62,7 +67,7 @@ class CardViewSet(MagicModelViewSet):
         if image_data:
             return HttpResponse(image_data, content_type="image/png")
         else:
-            red = Image.new('RGBA', (1, 1), (255, 0, 0, 0))
+            red = Image.new("RGBA", (1, 1), (255, 0, 0, 0))
             response = HttpResponse(content_type="image/png")
             red.save(response, "PNG")
             return response
@@ -76,21 +81,21 @@ class CardViewSet(MagicModelViewSet):
         except MagicCardImageImportException as e:
             log.warning(e)
             data = self.serializer_class(card).data
-            data['found_img_urls'] = e.found_img_urls
+            data["found_img_urls"] = e.found_img_urls
         return Response(data)
 
 
 class DeckViewSet(ActionSerializerMixin, MagicModelViewSet):
     serializer_class = DeckSerializer
-    lookup_field = 'name'
+    lookup_field = "name"
     action_serializers = {
-        'retrieve': DeckDetailSerializer,
-        'list': DeckDetailSerializer
+        "retrieve": DeckDetailSerializer,
+        "list": DeckDetailSerializer,
     }
 
     def get_queryset(self):
         params = self.request.query_params
-        return Deck.objects.search(query=params.get('query'))
+        return Deck.objects.search(query=params.get("query"))
 
 
 class CardTypeViewSet(MagicViewSet):

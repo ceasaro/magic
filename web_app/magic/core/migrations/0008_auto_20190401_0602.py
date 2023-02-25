@@ -9,36 +9,52 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0007_auto_20190330_1102'),
+        ("core", "0007_auto_20190330_1102"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='DeckCard',
+            name="DeckCard",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
         ),
         migrations.AlterModelOptions(
-            name='card',
-            options={'ordering': ['name']},
+            name="card",
+            options={"ordering": ["name"]},
         ),
         migrations.AlterModelOptions(
-            name='deck',
-            options={'ordering': ['name']},
+            name="deck",
+            options={"ordering": ["name"]},
         ),
         migrations.RemoveField(
-            model_name='deck',
-            name='cards',
+            model_name="deck",
+            name="cards",
         ),
         migrations.AddField(
-            model_name='deckcard',
-            name='card',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='decks', to='core.Card'),
+            model_name="deckcard",
+            name="card",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="decks",
+                to="core.Card",
+            ),
         ),
         migrations.AddField(
-            model_name='deckcard',
-            name='deck',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cards', to='core.Deck'),
+            model_name="deckcard",
+            name="deck",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="cards",
+                to="core.Deck",
+            ),
         ),
     ]

@@ -10,23 +10,32 @@ import magic.core.models.magic_models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0001_initial'),
+        ("core", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='card',
-            name='_image',
-            field=models.FileField(blank=True, null=True, upload_to=magic.core.models.magic_models.card_image_path),
+            model_name="card",
+            name="_image",
+            field=models.FileField(
+                blank=True,
+                null=True,
+                upload_to=magic.core.models.magic_models.card_image_path,
+            ),
         ),
         migrations.AddField(
-            model_name='deck',
-            name='set',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='core.Set'),
+            model_name="deck",
+            name="set",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core.Set",
+            ),
         ),
         migrations.AlterField(
-            model_name='deck',
-            name='name',
+            model_name="deck",
+            name="name",
             field=models.CharField(max_length=64, unique=True),
         ),
     ]

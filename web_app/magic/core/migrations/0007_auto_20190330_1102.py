@@ -9,23 +9,35 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0006_permission_groups'),
+        ("core", "0006_permission_groups"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='card',
-            name='set',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='cards', to='core.Set'),
+            model_name="card",
+            name="set",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="cards",
+                to="core.Set",
+            ),
         ),
         migrations.AlterField(
-            model_name='deck',
-            name='cards',
-            field=models.ManyToManyField(blank=True, null=True, related_name='deck', to='core.Card'),
+            model_name="deck",
+            name="cards",
+            field=models.ManyToManyField(
+                blank=True, null=True, related_name="deck", to="core.Card"
+            ),
         ),
         migrations.AlterField(
-            model_name='deck',
-            name='set',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='core.Set'),
+            model_name="deck",
+            name="set",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="core.Set",
+            ),
         ),
     ]

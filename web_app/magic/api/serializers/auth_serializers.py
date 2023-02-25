@@ -3,14 +3,12 @@ from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
-        fields = ('username', 'email')
+        fields = ("username", "email")
 
 
 class UserTokenSerializer(UserSerializer):
-
     class Meta:
         model = User
-        fields = ('username', 'email', 'auth_token')
+        fields = ("username", "email", "auth_token")

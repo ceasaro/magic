@@ -8,18 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0004_auto_20171004_0731'),
+        ("core", "0004_auto_20171004_0731"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='card',
-            name='_supertypes',
+            model_name="card",
+            name="_supertypes",
             field=models.CharField(max_length=1024, null=True),
         ),
         migrations.AddField(
-            model_name='card',
-            name='cmc',
+            model_name="card",
+            name="cmc",
             field=models.IntegerField(default=0),
         ),
     ]

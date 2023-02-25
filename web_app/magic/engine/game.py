@@ -42,7 +42,7 @@ class CardState(object):
         return isinstance(other, CardState) and other.external_id == self.external_id
 
 
-class Cards():
+class Cards:
     def __init__(self, cards=None):
         super().__init__()
         self.cards = cards if cards else []
@@ -59,8 +59,10 @@ class Cards():
 
     def get_by_name(self, name, set_name=None):
         try:
-            return filter(lambda x: x.name == name and set_name is None or x.set.name == set_name,
-                          self.cards).__next__()
+            return filter(
+                lambda x: x.name == name and set_name is None or x.set.name == set_name,
+                self.cards,
+            ).__next__()
         except StopIteration:
             return None
 
@@ -93,7 +95,7 @@ class Library(Cards):
             return self.cards.pop(0)
 
 
-class Player():
+class Player:
     def __init__(self, name, library):
         super().__init__()
         self.name = name

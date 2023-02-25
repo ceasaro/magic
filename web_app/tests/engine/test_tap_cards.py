@@ -10,7 +10,7 @@ def test_tap_land_card(player, lea_forest_land):
     player.tap(forest_card_1)
     assert player.hand.count() == 4
     assert player.played_cards.count() == 1
-    assert str(player.mana_pool) == 'G'
+    assert str(player.mana_pool) == "G"
 
     assert player.hand.get_by_name("Forest") is None, "no forest card should be found"
 
@@ -22,10 +22,10 @@ def test_tap_land_card(player, lea_forest_land):
 
     assert player.hand.count() == 4
     assert player.played_cards.count() == 2
-    assert str(player.mana_pool) == 'GG'
+    assert str(player.mana_pool) == "GG"
 
     player.tap(forest_2)
-    assert str(player.mana_pool) == 'GG', 'tapping again should not add extra mana'
+    assert str(player.mana_pool) == "GG", "tapping again should not add extra mana"
 
 
 @pytest.mark.django_db
@@ -36,11 +36,14 @@ def test_tap_creature_card(player):
     player.tap(forest)
     player.play(birds_of_paradise)
     player.tap(birds_of_paradise)
-    assert birds_of_paradise in player.attacking_cards, "expected 'Birds of Paradise' in attacking cards"
+    assert (
+        birds_of_paradise in player.attacking_cards
+    ), "expected 'Birds of Paradise' in attacking cards"
 
     # test untap
     player.untap(birds_of_paradise)
     assert birds_of_paradise.tapped == False
+
 
 @pytest.mark.django_db
 def test_tap_land_card(player):

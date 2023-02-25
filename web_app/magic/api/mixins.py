@@ -9,6 +9,7 @@ class ActionSerializerMixin:
         'list': ListSerializer,
     }
     """
+
     action_serializers = {}
 
     def get_serializer_class(self):

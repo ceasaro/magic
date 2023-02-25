@@ -5,46 +5,56 @@ from magic.core.models import Card
 
 
 class Command(BaseCommand):
-    help = 'download card images of card'
+    help = "download card images of card"
 
     def add_arguments(self, parser):
 
         # Named (optional) arguments
         parser.add_argument(
-            '--all',
-            action='store_true',
-            dest='all',
+            "--all",
+            action="store_true",
+            dest="all",
             default=False,
-            help='download the images for all cards (if image is not present)',
+            help="download the images for all cards (if image is not present)",
         )
         parser.add_argument(
-            '-c', '--card',
-            dest='card',
-            help='download image for this card',
+            "-c",
+            "--card",
+            dest="card",
+            help="download image for this card",
         )
         parser.add_argument(
-            '-r', '--refresh',
-            action='store_true',
-            dest='refresh',
+            "-r",
+            "--refresh",
+            action="store_true",
+            dest="refresh",
             default=False,
-            help='refresh image card(s) even it has already been downloaded',
+            help="refresh image card(s) even it has already been downloaded",
         )
 
     def handle(self, *args, **options):
-        refresh = options['refresh']
-        if options['card']:
-            self.download_image(Card.objects.filter(name=options['card']), refresh=refresh)
-        elif options['all']:
-            if console_confirm('Are yo sure you want to download all missing card images, this can take a while.?'):
+        refresh = options["refresh"]
+        if options["card"]:
+            self.download_image(
+                Card.objects.filter(name=options["card"]), refresh=refresh
+            )
+        elif options["all"]:
+            if console_confirm(
+                "Are yo sure you want to download all missing card images, this can take a while.?"
+            ):
                 if refresh:
                     self.download_image(Card.objects.all(), refresh=refresh)
                 else:
                     self.download_image(Card.objects.filter(image__isnull=not refresh))
             else:
-                print ("Downloading card images aborted")
+                print("Downloading card images aborted")
         else:
             command_name = os.path.splitext(os.path.basename(__file__))[0]
-            print ("No valid options specified! type './manage.py {} -h' for more info.".format(command_name))
+            print(
+                "No valid options specified! type './manage.py {} -h' for more info.".format(
+                    command_name
+                )
+            )
 
     def download_image(self, cards, refresh=False):
         total = len(cards)
@@ -54,7 +64,7 @@ class Command(BaseCommand):
                 message = "downloaded image for card '{}'".format(card)
             except:
                 message = "ERROR downloading image for card '{}'".format(card)
-            print ("{}/{}: {}".format(i, total, message))
+            print("{}/{}: {}".format(i, total, message))
 
 
 def console_confirm(msg):
@@ -65,6 +75,6 @@ def console_confirm(msg):
     """
     if msg:
         confirmed = input("{0} (y/n)  ".format(msg))
-        return confirmed in ['y', 'yes', 'Y', 'YES']
+        return confirmed in ["y", "yes", "Y", "YES"]
     else:
         return False
