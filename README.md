@@ -9,11 +9,12 @@ This project is built using react.js and redux and the django framework
 3) `npm install`
 4) `npm run`
 5) `mkvirtualenv -p /usr/bin/python3 magic`
-6) `pip install -r setup/requirements.txt`
+6) `pip install -r setup/requirements-dev.txt`
 7) cd `../web_app`
-8) `./manage migrate`
-9) `./manage run server`
-10) check your application at [http://localhost:8000]()
+8) `cp magic/settings/local_settings_example.py magic/settings/local_settings.py` and modify to your local needs.
+9) `./manage migrate`
+10) `./manage run server`
+11) check your application at [http://localhost:8000]()
 
 
 
