@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.urls import path, include
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -19,9 +19,9 @@ router.register(r"decks", DeckViewSet, "Deck")
 
 app_name = "api"
 urlpatterns = [
-    url(r"^", include(router.urls)),
-    url(r"^token/$", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    url(r"^token/refresh/$", TokenRefreshView.as_view(), name="token_refresh"),
+    path(r"", include(router.urls)),
+    path(r"token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path(r"token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # url(r'^token/verify/$', TokenVerifyView.as_view(), name='token_verify'),
-    url(r"^api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path(r"api-auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]
