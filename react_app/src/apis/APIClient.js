@@ -1,7 +1,7 @@
 let _ = require('lodash');
 
 let MagicAPI = {
-    API_DOMAIN: 'http://magic.local:8000',
+    API_DOMAIN: 'http://localhost:8000',
     get: function (path, get_options) {
         return this._fetch(path, get_options)
     },
