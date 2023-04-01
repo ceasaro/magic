@@ -51,6 +51,9 @@ class CardQuerySet(models.QuerySet):
     def valid_mana(self):
         return self.exclude(mana_cost__contains=Mana.NOT_IMPLEMENTED)
 
+    def by_set(self, set_name):
+        return self.filter(set__name=set_name)
+
     def search(
         self,
         q=None,
@@ -140,6 +143,7 @@ class Card(models.Model, CardTypes):
         ]
 
     def download_image(self, refresh=False, url=None):
+        updated = False
         if not self.image or refresh or url:
             img_url = url or import_card_image(self)
             if img_url:
@@ -154,7 +158,8 @@ class Card(models.Model, CardTypes):
                 urlretrieve(img_url, img_file_name)
                 self.image = img_model_name
                 self.save()
-        return self.image
+                updated = True
+        return self.image, updated
 
     @property
     def power(self):
